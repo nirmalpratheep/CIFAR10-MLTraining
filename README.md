@@ -361,3 +361,61 @@ python main.py --epochs 20 --save_best --snapshot_dir ./best_models
 - Use `--snapshot_dir` to specify a custom directory
 - Use `--snapshot_freq` to control how often snapshots are saved
 - Use `--save_best` to only save when test accuracy improves
+
+## 📊 Visualization and Metrics
+
+The training script now includes comprehensive visualization and metrics capabilities.
+
+### Visualization Features
+
+- **Training Curves**: Loss, accuracy, and learning rate plots
+- **Confusion Matrix**: Visual representation of classification performance
+- **Per-Class Metrics**: Precision, recall, F1-score for each class
+- **Classification Report**: Detailed performance metrics
+- **Learning Rate Schedule**: Visualization of LR changes over time
+
+### Command Line Options
+
+```bash
+# Enable all visualizations
+python main.py --plot_training --plot_evaluation
+
+# Generate plots every 10 epochs
+python main.py --plot_training --plot_freq 10
+
+# Save plots to custom directory
+python main.py --plot_training --plot_dir ./my_plots
+
+# Disable all plotting for faster training
+python main.py --no_plots
+```
+
+### Generated Visualizations
+
+1. **training_curves.png**: Loss and accuracy curves over epochs
+2. **confusion_matrix.png**: Normalized confusion matrix with class names
+3. **class_metrics.png**: Per-class precision, recall, F1, and support
+4. **learning_rate_schedule.png**: Learning rate changes over time
+5. **classification_report.txt**: Detailed text report with all metrics
+
+### Example Usage
+
+```bash
+# Quick demo with visualization
+python example_visualization.py
+
+# Full training with all plots
+python main.py --batch_size 128 --epochs 20 --plot_training --plot_evaluation
+
+# Resume training with plots
+python main.py --resume_from ./snapshots/cifar_epoch_10.pth --plot_training --plot_evaluation
+```
+
+### Metrics Calculated
+
+- **Accuracy**: Overall classification accuracy
+- **Top-K Accuracy**: Top-3 and Top-5 accuracy
+- **Precision/Recall/F1**: Macro and weighted averages
+- **Per-Class Metrics**: Individual class performance
+- **Support**: Number of samples per class
+- **Confusion Matrix**: Detailed classification breakdown

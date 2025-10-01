@@ -64,3 +64,4 @@ def evaluate(model, device, test_loader, criterion):
     test_acc = 100. * correct / total
     
     return test_loss, test_acc
+
