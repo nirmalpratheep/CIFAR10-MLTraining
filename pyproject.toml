@@ -1,0 +1,15 @@
+[project]
+name = "cifar10"
+version = "0.1.0"
+description = "CIFAR Image classification training"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "torch>=2.2",
+    "torchvision>=0.17",
+    "albumentations>=1.4",
+    "opencv-python-headless>=4.9",
+    "numpy>=1.26",
+    "tqdm>=4.66",
+    "torchsummary>=1.5",
+]
