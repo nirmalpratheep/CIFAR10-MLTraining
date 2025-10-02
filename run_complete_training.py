@@ -32,6 +32,7 @@ def _timestamp() -> str:
 def _tee_run_command_and_log(cmd, log_file_path: str) -> int:
     """Run a command, tee stdout/stderr to console and a log file, and return exit code."""
     with open(log_file_path, "w", encoding="utf-8") as log_file:
+        print ("Command: " + " ".join(cmd) + "\n")
         log_file.write("Command: " + " ".join(cmd) + "\n")
         log_file.flush()
         process = subprocess.Popen(
@@ -67,27 +68,29 @@ def run_complete_training():
     # Complete training command with all features
     cmd = [
         sys.executable, "main.py",
-        "--batch_size", "128",
-        "--epochs", "30",
+        "--batch_size", "512",
+        "--epochs", "180",
         "--lr", "0.1",
         "--momentum", "0.9",
-        "--weight_decay", "1e-4",
+        "--weight_decay", "5e-4",
         "--warmup_epochs", "5",
         "--scheduler", "cosine",
-        "--snapshot_freq", "2",
+        "--snapshot_freq", "5",
         "--snapshot_dir", "./snapshots_complete",
         "--save_best",
         "--plot_training",
         "--plot_evaluation",
-        "--plot_freq", "30",
+        "--plot_freq", "180",
         "--plot_dir", "./plots_complete",
         "--cache_transforms",
-        "--cache_dir", "./cache_complete"
+        "--cache_dir", "./cache_complete",
+        "--num_workers", "2",
+        "--max_grad_norm", "1.0"
     ]
     
     print("Command:", " ".join(cmd))
     print("-" * 60)
-    
+    print (cmd)
     # Prepare logging
     log_dir = _ensure_log_dir()
     log_path = os.path.join(log_dir, f"training_complete_{_timestamp()}.log")

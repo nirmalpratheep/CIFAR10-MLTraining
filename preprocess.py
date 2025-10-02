@@ -1,6 +1,7 @@
 import torch
 from torchvision import datasets
-from albumentations import Compose, HorizontalFlip, ShiftScaleRotate, CoarseDropout, Normalize
+from albumentations import Compose, HorizontalFlip, ShiftScaleRotate, CoarseDropout, Normalize, ColorJitter
+from albumentations import PadIfNeeded, RandomCrop
 from albumentations.pytorch import ToTensorV2
 import numpy as np
 import os
@@ -30,19 +31,18 @@ def get_transforms(_: str | None = None):
     fill_value = _coarse_dropout_fill_value_from_mean(CIFAR10_MEAN)
 
     train_transforms = Compose([
+        PadIfNeeded(min_height=40, min_width=40, border_mode=0, p=1.0),
+        RandomCrop(height=32, width=32, p=1.0),
         HorizontalFlip(p=0.5),
         ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.1, rotate_limit=15, p=0.5),
         CoarseDropout(
-            max_holes=1,
-            max_height=16,
-            max_width=16,
-            min_holes=1,
-            min_height=16,
-            min_width=16,
-            fill_value=fill_value,
-            mask_fill_value=None,
+            num_holes_range=(1, 1),
+            hole_height_range=(16, 16),
+            hole_width_range=(16, 16),
+            fill=fill_value,
             p=0.5,
         ),
+        ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.02, p=0.5),
         Normalize(mean=CIFAR10_MEAN, std=CIFAR10_STD),
         ToTensorV2(),
     ])
@@ -119,11 +119,11 @@ def get_datasets(
 def get_data_loaders(
     batch_size: int = 128,
     data_dir: str = "./data",
-    num_workers: int = 2,
-    pin_memory: bool = True,
+    num_workers: int = 2,  # Restored to 2 for better performance
+    pin_memory: bool = True,  # Restored for GPU training
     shuffle_train: bool = True,
     model_name: str | None = None,
-    cache_transforms: bool = False,
+    cache_transforms: bool = False,  # Default to False, enable with --cache_transforms
     cache_dir: str = "./cache",
     cache_namespace: Optional[str] = None,
 ):

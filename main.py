@@ -10,6 +10,7 @@ from datetime import datetime
 
 from preprocess import get_data_loaders
 from train import train_epoch, evaluate
+from torch.amp import GradScaler
 from torch.optim.lr_scheduler import OneCycleLR, CosineAnnealingLR, StepLR
 from torchsummary import summary
 from visualization import (
@@ -132,27 +133,48 @@ def main():
     parser.add_argument("--plot_freq", type=int, default=10, help="Generate plots every N epochs")
     parser.add_argument("--no_plots", action="store_true", help="Disable all plotting")
     
+    # Training features
+    parser.add_argument("--amp", action="store_true", help="Enable mixed precision training (AMP)")
+    parser.add_argument("--max_grad_norm", type=float, default=1.0, help="Max gradient norm for clipping")
+    parser.add_argument("--num_workers", type=int, default=4, help="DataLoader workers")
+
     args = parser.parse_args()
     set_seed(42)
     device = get_device(prefer_cuda=not args.no_cuda)
 
+    # Optimize data loading based on device
+    use_cuda = torch.cuda.is_available() and not args.no_cuda
+    pin_memory = use_cuda and args.cache_transforms  # Only use pin_memory with caching for stability
+    num_workers = min(args.num_workers, 2) if not use_cuda else args.num_workers
+    
+    print(f"Data loading: num_workers={num_workers}, pin_memory={pin_memory}, use_cuda={use_cuda}")
+    print(f"Caching: {args.cache_transforms} (dir: {args.cache_dir})")
+    
+    print("Loading datasets...")
     train_loader, test_loader = get_data_loaders(
         batch_size=args.batch_size,
         data_dir=args.data_dir,
-        num_workers=2,
-        pin_memory=True,
+        num_workers=num_workers,
+        pin_memory=pin_memory,
         shuffle_train=True,
         model_name=args.model,
         cache_transforms=args.cache_transforms,
         cache_dir=args.cache_dir,
         cache_namespace=args.cache_namespace,
     )
+    
+    # Test data loading
+    print("Testing data loading...")
+    try:
+        test_batch = next(iter(train_loader))
+        print(f"Data loading successful! Batch shape: {test_batch[0].shape}, labels: {test_batch[1].shape}")
+    except Exception as e:
+        print(f"Data loading failed: {e}")
+        return 1
 
     model = build_model(args.model, device)
-
-    use_cuda = torch.cuda.is_available()
-    device = torch.device("cuda" if use_cuda else "cpu")
-    print(device)
+    print(f"Device: {device}")
+    print(f"Model loaded, starting training...")
     # CIFAR-10 input shape
     summary(model, input_size=(3, 32, 32))
     
@@ -190,8 +212,10 @@ def main():
         best_test_acc = max(test_acc) if test_acc else 0.0
         print(f"Resuming training from epoch {start_epoch}")
 
+    scaler = GradScaler('cuda', enabled=args.amp)
+
     for epoch in range(start_epoch, args.epochs + 1):
-        print(f"Epoch {epoch}")
+        print(f"\nEpoch {epoch}/{args.epochs}")
         
         # Apply learning rate warmup
         if args.warmup_epochs > 0:
@@ -200,8 +224,19 @@ def main():
             current_lr = optimizer.param_groups[0]['lr']
             print(f"Learning Rate: {current_lr:.6f} (warmup factor: {warmup_factor:.3f})")
         
-        tr_loss, tr_acc = train_epoch(model, device, train_loader, optimizer, criterion)
-        te_loss, te_acc = evaluate(model, device, test_loader, criterion)
+        print("Starting training...")
+        tr_loss, tr_acc = train_epoch(
+            model,
+            device,
+            train_loader,
+            optimizer,
+            criterion,
+            scaler=scaler if args.amp else None,
+            use_amp=args.amp,
+            max_grad_norm=args.max_grad_norm,
+        )
+        print("Starting evaluation...")
+        te_loss, te_acc = evaluate(model, device, test_loader, criterion, use_amp=args.amp)
         
         # Step scheduler (only after warmup)
         if epoch > args.warmup_epochs:

@@ -1,67 +1,80 @@
 import torch
 import torch.nn as nn
-from tqdm import tqdm
+from torch.amp import autocast, GradScaler
 
 
-def train_epoch(model, device, train_loader, optimizer, criterion):
-    """Train the model for one epoch."""
+def train_epoch(
+    model,
+    device,
+    train_loader,
+    optimizer,
+    criterion,
+    scaler: GradScaler | None = None,
+    use_amp: bool = False,
+    max_grad_norm: float = 1.0,
+):
+    """Train the model for one epoch with optional AMP and gradient clipping."""
     model.train()
     running_loss = 0.0
     correct = 0
     total = 0
-    
-    pbar = tqdm(train_loader, desc="Training")
-    for batch_idx, (data, target) in enumerate(pbar):
+
+    for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
-        
-        optimizer.zero_grad()
-        output = model(data)
-        loss = criterion(output, target)
-        loss.backward()
-        optimizer.step()
-        
+
+        optimizer.zero_grad(set_to_none=True)
+        if use_amp and scaler is not None:
+            with autocast():
+                output = model(data)
+                loss = criterion(output, target)
+            scaler.scale(loss).backward()
+            scaler.unscale_(optimizer)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
+            scaler.step(optimizer)
+            scaler.update()
+        else:
+            output = model(data)
+            loss = criterion(output, target)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
+            optimizer.step()
+
         running_loss += loss.item()
         _, predicted = output.max(1)
         total += target.size(0)
         correct += predicted.eq(target).sum().item()
-        
-        # Update progress bar
-        pbar.set_postfix({
-            'Loss': f'{loss.item():.4f}',
-            'Acc': f'{100.*correct/total:.2f}%'
-        })
-    
+
     epoch_loss = running_loss / len(train_loader)
     epoch_acc = 100. * correct / total
-    
+
     return epoch_loss, epoch_acc
 
 
-def evaluate(model, device, test_loader, criterion):
-    """Evaluate the model on test set."""
+def evaluate(model, device, test_loader, criterion, use_amp: bool = False):
+    """Evaluate the model on test set (optionally with AMP)."""
     model.eval()
     test_loss = 0
     correct = 0
     total = 0
-    
+
     with torch.no_grad():
-        pbar = tqdm(test_loader, desc="Evaluating")
-        for data, target in pbar:
+        for data, target in test_loader:
             data, target = data.to(device), target.to(device)
-            output = model(data)
-            test_loss += criterion(output, target).item()
+            if use_amp:
+                with autocast():
+                    output = model(data)
+                    loss_val = criterion(output, target).item()
+            else:
+                output = model(data)
+                loss_val = criterion(output, target).item()
+            test_loss += loss_val
             _, predicted = output.max(1)
             total += target.size(0)
             correct += predicted.eq(target).sum().item()
-            
-            # Update progress bar
-            pbar.set_postfix({
-                'Loss': f'{test_loss/(len(test_loader)):.4f}',
-                'Acc': f'{100.*correct/total:.2f}%'
-            })
-    
+        # Intentionally no per-batch logging; epoch summary is printed in main.py
+
     test_loss /= len(test_loader)
     test_acc = 100. * correct / total
-    
+
     return test_loss, test_acc
 

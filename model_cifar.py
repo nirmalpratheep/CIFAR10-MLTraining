@@ -1,71 +1,111 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import random
+
+
+def drop_path(x, drop_prob: float = 0.0, training: bool = False):
+    """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks)."""
+    if drop_prob == 0.0 or not training:
+        return x
+    keep_prob = 1 - drop_prob
+    shape = (x.shape[0],) + (1,) * (x.ndim - 1)  # work with diff dim tensors, not just 2D ConvNets
+    random_tensor = keep_prob + torch.rand(shape, dtype=x.dtype, device=x.device)
+    random_tensor.floor_()  # binarize
+    output = x.div(keep_prob) * random_tensor
+    return output
+
+
+class DropPath(nn.Module):
+    """Drop paths (Stochastic Depth) per sample  (when applied in main path of residual blocks)."""
+    def __init__(self, drop_prob=None):
+        super(DropPath, self).__init__()
+        self.drop_prob = drop_prob
+
+    def forward(self, x):
+        return drop_path(x, self.drop_prob, self.training)
 
 
 class CIFARNet(nn.Module):
     """
-    C1–C4–Output backbone for CIFAR-10.
-
-    Receptive field (RF) calculation (stride listed where applicable):
-      - C1: 11x11 conv → RF = 1 + (11-1)*1 = 11, jump j = 1
-      - C2: 7x7 depthwise (s=1) → RF = 11 + (7-1)*1 = 17
-           (1x1 pointwise does not change RF)
-      - C3: 7x7 depthwise with dilation=4 → effective k = 7 + (7-1)*(4-1) = 25
-           RF = 17 + (25-1)*1 = 41 (1x1 pointwise no change)
-      - C4: 5x5 depthwise with stride=2 → RF = 41 + (5-1)*1 = 45 (>44), new j = 2
-      - Classifier 1x1 + GAP do not change RF
+    C1–C4–Output backbone for CIFAR-10 with residual connections and spatial dropout.
+    
+    Channel progression: 3 -> 40 -> 128 -> 240 -> 384 -> 10
     """
 
-    def __init__(self, num_classes: int = 10, dropout_p: float = 0.05):
+    def __init__(self, num_classes: int = 10, dropout_p: float = 0.1, drop_path_rate: float = 0.1):
         super().__init__()
 
-        # C1: Large kernel to boost receptive field early (3->32)
+        # C1: Large kernel to boost receptive field early (3->40)
         self.c1 = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=11, padding=5, bias=False),
-            nn.BatchNorm2d(32),
+            nn.Conv2d(in_channels=3, out_channels=40, kernel_size=11, padding=5, bias=False),
+            nn.BatchNorm2d(40),
             nn.ReLU(inplace=True),
-            nn.Dropout(dropout_p),
+            nn.Dropout2d(dropout_p*0.5),
         )
 
-        # C2: Depthwise separable convolution (32->128)
-        self.c2_depthwise = nn.Conv2d(32, 32, kernel_size=7, padding=3, groups=32, bias=False)
-        self.c2_pointwise = nn.Conv2d(32, 128, kernel_size=1, bias=False)
+        # C2: Depthwise separable convolution with residual (40->128)
+        self.c2_depthwise = nn.Conv2d(40, 40, kernel_size=7, padding=3, groups=40, bias=False)
+        self.c2_pointwise = nn.Conv2d(40, 128, kernel_size=1, bias=False)
         self.c2_bn = nn.BatchNorm2d(128)
-        self.c2_drop = nn.Dropout(dropout_p)
+        self.c2_drop = nn.Dropout2d(dropout_p)
+        self.c2_drop_path = DropPath(drop_path_rate)
+        
 
-        # C3: Dilated depthwise separable conv (128->256)
-        # kernel=7, dilation=4 -> effective kernel=25, padding=12 keeps size
+        self.c2_residual = nn.Sequential(
+            nn.Conv2d(in_channels=40, out_channels=128, kernel_size=1,bias=False),
+            nn.BatchNorm2d(128)
+        )
+
+
+        # C3: Dilated depthwise separable conv with residual (128->240)
         self.c3_depthwise = nn.Conv2d(128, 128, kernel_size=7, dilation=4, padding=12, groups=128, bias=False)
-        self.c3_pointwise = nn.Conv2d(128, 256, kernel_size=1, bias=False)
-        self.c3_bn = nn.BatchNorm2d(256)
-        self.c3_drop = nn.Dropout(dropout_p)
+        self.c3_pointwise = nn.Conv2d(128, 240, kernel_size=1, bias=False)
+        self.c3_bn = nn.BatchNorm2d(240)
+        self.c3_drop = nn.Dropout2d(dropout_p)
+        self.c3_drop_path = DropPath(drop_path_rate)
+        
+        # Residual connection for C3 (128->240)
+        self.c3_residual = nn.Sequential(
+            nn.Conv2d(in_channels=128, out_channels=240, kernel_size=1,bias=False),
+            nn.BatchNorm2d(240)
+        )
 
-        # C4: Stride-2 depthwise separable conv (256->448)
-        self.c4_depthwise = nn.Conv2d(256, 256, kernel_size=5, stride=2, padding=2, groups=256, bias=False)
-        self.c4_pointwise = nn.Conv2d(256, 448, kernel_size=1, bias=False)
-        self.c4_bn = nn.BatchNorm2d(448)
-        self.c4_drop = nn.Dropout(dropout_p)
-
+        # C4: Stride-2 depthwise separable conv with residual (240->384)
+        self.c4_depthwise = nn.Conv2d(240, 240, kernel_size=5, stride=2, padding=2, groups=240, bias=False)
+        self.c4_pointwise = nn.Conv2d(240, 384, kernel_size=1, bias=False)
+        self.c4_bn = nn.BatchNorm2d(384)
+        self.c4_drop = nn.Dropout2d(dropout_p)
+        self.c4_drop_path = DropPath(drop_path_rate)
+        
         # Output: 1x1 conv to map to classes, followed by GAP
-        self.classifier = nn.Conv2d(448, num_classes, kernel_size=1, bias=True)
+        self.classifier = nn.Conv2d(384, num_classes, kernel_size=1, bias=True)
         self.gap = nn.AdaptiveAvgPool2d((1, 1))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         
         # C1
         x = self.c1(x)
-
-        # C2 depthwise separable
-        x = F.relu(self.c2_bn(self.c2_pointwise(self.c2_depthwise(x))), inplace=True)
+        # C2 depthwise separable with residual
+        identity = self.c2_residual(x)
+        x = self.c2_depthwise(x)
+        x = self.c2_pointwise(x)
+        x = self.c2_bn(x)
+                # Add residual connection
+        x = F.relu(x+self.c3_drop_path(identity), inplace=True)
         x = self.c2_drop(x)
 
-        # C3 dilated depthwise separable
-        x = F.relu(self.c3_bn(self.c3_pointwise(self.c3_depthwise(x))), inplace=True)
+        # C3 dilated depthwise separable with residual
+        identity = self.c3_residual(x)
+        x = self.c3_depthwise(x)
+        x = self.c3_pointwise(x)
+        x = self.c3_bn(x)
+        x = F.relu(x+self.c3_drop_path(identity), inplace=True)
         x = self.c3_drop(x)
-
-        # C4 stride-2 depthwise separable
-        x = F.relu(self.c4_bn(self.c4_pointwise(self.c4_depthwise(x))), inplace=True)
+        
+        x = self.c4_depthwise(x)
+        x = self.c4_pointwise(x)
+        x = self.c4_bn(x)
         x = self.c4_drop(x)
 
         # Output
