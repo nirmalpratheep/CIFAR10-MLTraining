@@ -8,6 +8,7 @@ This module provides:
 - Model performance analysis
 - Learning rate visualization
 """
+os.environ["MPLBACKEND"] = "Agg"
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -406,4 +407,5 @@ def create_evaluation_summary(model, device, test_loader, criterion, save_dir=".
     print(f"📁 All evaluation plots saved in: {save_dir}")
     
     return metrics, eval_results
+
 
