@@ -97,7 +97,6 @@ class CIFARNet(nn.Module):
         x = self.c4_pointwise(x)
         x = self.c4_bn(x)
         x = F.relu(x, inplace=True)
-        x = self.c4_drop(x)
 
         # Output: Global average pooling + FC layer
         x = self.gap(x)
@@ -108,5 +107,6 @@ class CIFARNet(nn.Module):
 
 def build_model(device: torch.device, num_classes: int = 10) -> nn.Module:
     return CIFARNet(num_classes=num_classes).to(device)
+
 
 
