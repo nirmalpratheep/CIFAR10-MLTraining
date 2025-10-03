@@ -16,14 +16,6 @@ def drop_path(x, drop_prob: float = 0.0, training: bool = False):
     return output
 
 
-class DropPath(nn.Module):
-    """Drop paths (Stochastic Depth) per sample  (when applied in main path of residual blocks)."""
-    def __init__(self, drop_prob=None):
-        super(DropPath, self).__init__()
-        self.drop_prob = drop_prob
-
-    def forward(self, x):
-        return drop_path(x, self.drop_prob, self.training)
 
 
 class CIFARNet(nn.Module):
@@ -49,7 +41,6 @@ class CIFARNet(nn.Module):
         self.c2_pointwise = nn.Conv2d(40, 128, kernel_size=1, bias=False)
         self.c2_bn = nn.BatchNorm2d(128)
         self.c2_drop = nn.Dropout2d(dropout_p)
-        self.c2_drop_path = DropPath(drop_path_rate)
         
 
         self.c2_residual = nn.Sequential(
@@ -63,8 +54,7 @@ class CIFARNet(nn.Module):
         self.c3_pointwise = nn.Conv2d(128, 240, kernel_size=1, bias=False)
         self.c3_bn = nn.BatchNorm2d(240)
         self.c3_drop = nn.Dropout2d(dropout_p)
-        self.c3_drop_path = DropPath(drop_path_rate)
-        
+
         # Residual connection for C3 (128->240)
         self.c3_residual = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=240, kernel_size=1,bias=False),
@@ -75,9 +65,7 @@ class CIFARNet(nn.Module):
         self.c4_depthwise = nn.Conv2d(240, 240, kernel_size=5, stride=2, padding=2, groups=240, bias=False)
         self.c4_pointwise = nn.Conv2d(240, 384, kernel_size=1, bias=False)
         self.c4_bn = nn.BatchNorm2d(384)
-        self.c4_drop = nn.Dropout2d(dropout_p)
-        self.c4_drop_path = DropPath(drop_path_rate)
-        
+        self.c4_drop = nn.Dropout2d(dropout_p*1.2)
         # Output: 1x1 conv to map to classes, followed by GAP
         self.classifier = nn.Conv2d(384, num_classes, kernel_size=1, bias=True)
         self.gap = nn.AdaptiveAvgPool2d((1, 1))
@@ -92,7 +80,7 @@ class CIFARNet(nn.Module):
         x = self.c2_pointwise(x)
         x = self.c2_bn(x)
                 # Add residual connection
-        x = F.relu(x+self.c3_drop_path(identity), inplace=True)
+        x = F.relu(x+drop_path(identity,self.training), inplace=True)
         x = self.c2_drop(x)
 
         # C3 dilated depthwise separable with residual
@@ -100,7 +88,7 @@ class CIFARNet(nn.Module):
         x = self.c3_depthwise(x)
         x = self.c3_pointwise(x)
         x = self.c3_bn(x)
-        x = F.relu(x+self.c3_drop_path(identity), inplace=True)
+        x = F.relu(x+drop_path(identity,self.training), inplace=True)
         x = self.c3_drop(x)
         
         x = self.c4_depthwise(x)

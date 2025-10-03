@@ -23,21 +23,11 @@ def train_epoch(
         data, target = data.to(device), target.to(device)
 
         optimizer.zero_grad(set_to_none=True)
-        if use_amp and scaler is not None:
-            with autocast():
-                output = model(data)
-                loss = criterion(output, target)
-            scaler.scale(loss).backward()
-            scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
-            scaler.step(optimizer)
-            scaler.update()
-        else:
-            output = model(data)
-            loss = criterion(output, target)
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
-            optimizer.step()
+        output = model(data)
+        loss = criterion(output, target)
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
+        optimizer.step()
 
         running_loss += loss.item()
         _, predicted = output.max(1)
@@ -60,13 +50,8 @@ def evaluate(model, device, test_loader, criterion, use_amp: bool = False):
     with torch.no_grad():
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
-            if use_amp:
-                with autocast():
-                    output = model(data)
-                    loss_val = criterion(output, target).item()
-            else:
-                output = model(data)
-                loss_val = criterion(output, target).item()
+            output = model(data)
+            loss_val = criterion(output, target).item()
             test_loss += loss_val
             _, predicted = output.max(1)
             total += target.size(0)
