@@ -69,7 +69,7 @@ def run_complete_training():
     cmd = [
         sys.executable, "main.py",
         "--batch_size", "512",
-        "--epochs", "180",
+        "--epochs", "250",
         "--lr", "0.1",
         "--momentum", "0.9",
         "--weight_decay", "5e-4",
@@ -236,4 +236,5 @@ def main():
 if __name__ == "__main__":
     main()
     
+
 
