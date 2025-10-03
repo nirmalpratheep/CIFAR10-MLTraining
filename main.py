@@ -112,7 +112,7 @@ def main():
     parser.add_argument("--weight_decay", type=float, default=1e-4, help="Weight decay for regularization")
     parser.add_argument("--step_size", type=int, default=15)
     parser.add_argument("--gamma", type=float, default=0.1)
-    parser.add_argument("--warmup_epochs", type=int, default=5, help="Number of warmup epochs")
+    parser.add_argument("--warmup_epochs", type=int, default=0, help="Number of warmup epochs (disabled)")
     parser.add_argument("--scheduler", type=str, default="cosine", choices=["cosine", "step", "onecycle"], help="Learning rate scheduler")
     parser.add_argument("--data_dir", type=str, default="./data")
     parser.add_argument("--cache_transforms", action="store_true", help="Cache transformed samples to disk")
@@ -217,12 +217,9 @@ def main():
     for epoch in range(start_epoch, args.epochs + 1):
         print(f"\nEpoch {epoch}/{args.epochs}")
         
-        # Apply learning rate warmup
-        if args.warmup_epochs > 0:
-            warmup_factor = get_lr_warmup_factor(epoch, args.warmup_epochs)
-            apply_warmup_lr(optimizer, args.lr, warmup_factor)
-            current_lr = optimizer.param_groups[0]['lr']
-            print(f"Learning Rate: {current_lr:.6f} (warmup factor: {warmup_factor:.3f})")
+        # No warmup - use scheduler directly
+        current_lr = optimizer.param_groups[0]['lr']
+        print(f"Learning Rate: {current_lr:.6f}")
         
         print("Starting training...")
         tr_loss, tr_acc = train_epoch(
@@ -238,12 +235,11 @@ def main():
         print("Starting evaluation...")
         te_loss, te_acc = evaluate(model, device, test_loader, criterion, use_amp=args.amp)
         
-        # Step scheduler (only after warmup)
-        if epoch > args.warmup_epochs:
-            if args.scheduler == "onecycle":
-                scheduler.step()  # OneCycleLR steps per batch
-            else:
-                scheduler.step()  # Other schedulers step per epoch
+        # Step scheduler every epoch
+        if args.scheduler == "onecycle":
+            scheduler.step()  # OneCycleLR steps per batch
+        else:
+            scheduler.step()  # Other schedulers step per epoch
 
         train_losses.append(tr_loss)
         train_acc.append(tr_acc)

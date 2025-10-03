@@ -31,6 +31,8 @@ def get_transforms(_: str | None = None):
     fill_value = _coarse_dropout_fill_value_from_mean(CIFAR10_MEAN)
 
     train_transforms = Compose([
+        PadIfNeeded(min_height=40, min_width=40, border_mode=0, p=1.0),
+        RandomCrop(height=32, width=32, p=1.0),
         HorizontalFlip(p=0.5),
         ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.1, rotate_limit=15, p=0.5),
         CoarseDropout(
@@ -40,6 +42,7 @@ def get_transforms(_: str | None = None):
             fill=fill_value,
             p=0.5,
         ),
+        ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.02, p=0.5),
         Normalize(mean=CIFAR10_MEAN, std=CIFAR10_STD),
         ToTensorV2(),
     ])

@@ -30,76 +30,79 @@ class CIFARNet(nn.Module):
 
         # C1: Large kernel to boost receptive field early (3->40)
         self.c1 = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=40, kernel_size=11, padding=5, bias=False),
+            nn.Conv2d(in_channels=3, out_channels=40, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(40),
             nn.ReLU(inplace=True),
             nn.Dropout2d(dropout_p*0.5),
         )
 
         # C2: Depthwise separable convolution with residual (40->128)
-        self.c2_depthwise = nn.Conv2d(40, 40, kernel_size=7, padding=3, groups=40, bias=False)
+        self.c2_depthwise = nn.Conv2d(40, 40, kernel_size=3, padding=1, groups=40, bias=False)
         self.c2_pointwise = nn.Conv2d(40, 128, kernel_size=1, bias=False)
         self.c2_bn = nn.BatchNorm2d(128)
         self.c2_drop = nn.Dropout2d(dropout_p)
         
-
+        # Residual connection for C2 (40->128)
         self.c2_residual = nn.Sequential(
-            nn.Conv2d(in_channels=40, out_channels=128, kernel_size=1,bias=False),
+            nn.Conv2d(in_channels=40, out_channels=128, kernel_size=1, bias=False),
             nn.BatchNorm2d(128)
         )
 
-
         # C3: Dilated depthwise separable conv with residual (128->240)
-        self.c3_depthwise = nn.Conv2d(128, 128, kernel_size=7, dilation=4, padding=12, groups=128, bias=False)
+        # For 3x3 kernel with dilation=4: effective kernel = 9x9, padding = 4
+        self.c3_depthwise = nn.Conv2d(128, 128, kernel_size=3, dilation=4, padding=4, groups=128, bias=False)
         self.c3_pointwise = nn.Conv2d(128, 240, kernel_size=1, bias=False)
         self.c3_bn = nn.BatchNorm2d(240)
         self.c3_drop = nn.Dropout2d(dropout_p)
-
+        
         # Residual connection for C3 (128->240)
         self.c3_residual = nn.Sequential(
-            nn.Conv2d(in_channels=128, out_channels=240, kernel_size=1,bias=False),
+            nn.Conv2d(in_channels=128, out_channels=240, kernel_size=1, bias=False),
             nn.BatchNorm2d(240)
         )
 
         # C4: Stride-2 depthwise separable conv with residual (240->384)
-        self.c4_depthwise = nn.Conv2d(240, 240, kernel_size=5, stride=2, padding=2, groups=240, bias=False)
+        self.c4_depthwise = nn.Conv2d(240, 240, kernel_size=3, stride=2, padding=1, groups=240, bias=False)
         self.c4_pointwise = nn.Conv2d(240, 384, kernel_size=1, bias=False)
         self.c4_bn = nn.BatchNorm2d(384)
         self.c4_drop = nn.Dropout2d(dropout_p*1.2)
-        # Output: 1x1 conv to map to classes, followed by GAP
-        self.classifier = nn.Conv2d(384, num_classes, kernel_size=1, bias=True)
+        
+        # Output: Fully connected layer
         self.gap = nn.AdaptiveAvgPool2d((1, 1))
+        self.classifier = nn.Linear(384, num_classes, bias=True)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         
         # C1
         x = self.c1(x)
+        
         # C2 depthwise separable with residual
-        identity = self.c2_residual(x)
+        identity_c2 = self.c2_residual(x)
         x = self.c2_depthwise(x)
         x = self.c2_pointwise(x)
         x = self.c2_bn(x)
-                # Add residual connection
-        x = F.relu(x+drop_path(identity,self.training), inplace=True)
+        x = F.relu(x + identity_c2, inplace=True)
         x = self.c2_drop(x)
 
         # C3 dilated depthwise separable with residual
-        identity = self.c3_residual(x)
+        identity_c3 = self.c3_residual(x)
         x = self.c3_depthwise(x)
         x = self.c3_pointwise(x)
         x = self.c3_bn(x)
-        x = F.relu(x+drop_path(identity,self.training), inplace=True)
+        x = F.relu(x + identity_c3, inplace=True)
         x = self.c3_drop(x)
         
+        # C4 stride-2 depthwise separable with residual
         x = self.c4_depthwise(x)
         x = self.c4_pointwise(x)
         x = self.c4_bn(x)
+        x = F.relu(x, inplace=True)
         x = self.c4_drop(x)
 
-        # Output
-        x = self.classifier(x)
+        # Output: Global average pooling + FC layer
         x = self.gap(x)
-        x = x.view(x.size(0), -1)
+        x = x.view(x.size(0), -1)  # Flatten
+        x = self.classifier(x)
         return x
 
 
