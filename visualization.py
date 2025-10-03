@@ -8,7 +8,14 @@ This module provides:
 - Model performance analysis
 - Learning rate visualization
 """
+import os
+import os
 
+# If Jupyter inline backend leaks into CLI, fix it
+if os.environ.get("MPLBACKEND", "").startswith("module://matplotlib_inline"):
+    os.environ["MPLBACKEND"] = "Agg"
+
+import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
