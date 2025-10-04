@@ -65,7 +65,6 @@ class CIFARNet(nn.Module):
         self.c4_depthwise = nn.Conv2d(240, 240, kernel_size=3, stride=2, padding=1, groups=240, bias=False)
         self.c4_pointwise = nn.Conv2d(240, 384, kernel_size=1, bias=False)
         self.c4_bn = nn.BatchNorm2d(384)
-        self.c4_drop = nn.Dropout2d(dropout_p*1.2)
         
         # Output: Fully connected layer
         self.gap = nn.AdaptiveAvgPool2d((1, 1))
@@ -96,8 +95,7 @@ class CIFARNet(nn.Module):
         x = self.c4_depthwise(x)
         x = self.c4_pointwise(x)
         x = self.c4_bn(x)
-        x = F.relu(x, inplace=True)
-
+        
         # Output: Global average pooling + FC layer
         x = self.gap(x)
         x = x.view(x.size(0), -1)  # Flatten
@@ -107,6 +105,7 @@ class CIFARNet(nn.Module):
 
 def build_model(device: torch.device, num_classes: int = 10) -> nn.Module:
     return CIFARNet(num_classes=num_classes).to(device)
+
 
 
 
