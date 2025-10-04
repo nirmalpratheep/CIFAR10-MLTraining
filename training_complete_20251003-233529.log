@@ -1,0 +1,1780 @@
+Command: /workspace/CIFAR10-MLTraining/.venv/bin/python3 main.py --batch_size 512 --epochs 250 --lr 0.1 --momentum 0.9 --weight_decay 5e-4 --warmup_epochs 5 --scheduler cosine --snapshot_freq 5 --snapshot_dir ./snapshots_complete --save_best --plot_training --plot_evaluation --plot_freq 180 --plot_dir ./plots_complete --cache_transforms --cache_dir ./cache_complete --num_workers 2 --max_grad_norm 1.0
+Random seed set to: 42
+Data loading: num_workers=2, pin_memory=True, use_cuda=True
+Caching: True (dir: ./cache_complete)
+Loading datasets...
+/workspace/CIFAR10-MLTraining/.venv/lib/python3.12/site-packages/albumentations/core/validation.py:114: UserWarning: ShiftScaleRotate is a special case of Affine transform. Please use Affine transform instead.
+  original_init(self, **validated_kwargs)
+Testing data loading...
+Data loading successful! Batch shape: torch.Size([512, 3, 32, 32]), labels: torch.Size([512])
+Device: cuda
+Model loaded, starting training...
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+            Conv2d-1           [-1, 40, 32, 32]           1,080
+       BatchNorm2d-2           [-1, 40, 32, 32]              80
+              ReLU-3           [-1, 40, 32, 32]               0
+         Dropout2d-4           [-1, 40, 32, 32]               0
+            Conv2d-5          [-1, 128, 32, 32]           5,120
+       BatchNorm2d-6          [-1, 128, 32, 32]             256
+            Conv2d-7           [-1, 40, 32, 32]             360
+            Conv2d-8          [-1, 128, 32, 32]           5,120
+       BatchNorm2d-9          [-1, 128, 32, 32]             256
+        Dropout2d-10          [-1, 128, 32, 32]               0
+           Conv2d-11          [-1, 240, 32, 32]          30,720
+      BatchNorm2d-12          [-1, 240, 32, 32]             480
+           Conv2d-13          [-1, 128, 32, 32]           1,152
+           Conv2d-14          [-1, 240, 32, 32]          30,720
+      BatchNorm2d-15          [-1, 240, 32, 32]             480
+        Dropout2d-16          [-1, 240, 32, 32]               0
+           Conv2d-17          [-1, 240, 16, 16]           2,160
+           Conv2d-18          [-1, 384, 16, 16]          92,160
+      BatchNorm2d-19          [-1, 384, 16, 16]             768
+AdaptiveAvgPool2d-20            [-1, 384, 1, 1]               0
+           Linear-21                   [-1, 10]           3,850
+================================================================
+Total params: 174,762
+Trainable params: 174,762
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 0.01
+Forward/backward pass size (MB): 18.91
+Params size (MB): 0.67
+Estimated Total Size (MB): 19.59
+----------------------------------------------------------------
+
+Epoch 1/250
+Learning Rate: 0.100000
+Starting training...
+Starting evaluation...
+Train Loss: 2.0007 | Train Acc: 28.32% | Test Loss: 1.7980 | Test Acc: 39.74% | LR: 0.099996
+New best test accuracy: 39.74%
+Snapshot saved: ./snapshots_complete/cifar_epoch_1.pth
+
+Epoch 2/250
+Learning Rate: 0.099996
+Starting training...
+Starting evaluation...
+Train Loss: 1.8600 | Train Acc: 36.16% | Test Loss: 1.6697 | Test Acc: 45.91% | LR: 0.099984
+New best test accuracy: 45.91%
+Snapshot saved: ./snapshots_complete/cifar_epoch_2.pth
+
+Epoch 3/250
+Learning Rate: 0.099984
+Starting training...
+Starting evaluation...
+Train Loss: 1.7843 | Train Acc: 40.24% | Test Loss: 1.6299 | Test Acc: 49.25% | LR: 0.099964
+New best test accuracy: 49.25%
+Snapshot saved: ./snapshots_complete/cifar_epoch_3.pth
+
+Epoch 4/250
+Learning Rate: 0.099964
+Starting training...
+Starting evaluation...
+Train Loss: 1.7159 | Train Acc: 43.79% | Test Loss: 1.5501 | Test Acc: 51.95% | LR: 0.099937
+New best test accuracy: 51.95%
+Snapshot saved: ./snapshots_complete/cifar_epoch_4.pth
+
+Epoch 5/250
+Learning Rate: 0.099937
+Starting training...
+Starting evaluation...
+Train Loss: 1.6612 | Train Acc: 46.48% | Test Loss: 1.5435 | Test Acc: 53.06% | LR: 0.099901
+New best test accuracy: 53.06%
+Snapshot saved: ./snapshots_complete/cifar_epoch_5.pth
+
+Epoch 6/250
+Learning Rate: 0.099901
+Starting training...
+Starting evaluation...
+Train Loss: 1.6205 | Train Acc: 48.77% | Test Loss: 1.4993 | Test Acc: 55.90% | LR: 0.099858
+New best test accuracy: 55.90%
+Snapshot saved: ./snapshots_complete/cifar_epoch_6.pth
+
+Epoch 7/250
+Learning Rate: 0.099858
+Starting training...
+Starting evaluation...
+Train Loss: 1.5833 | Train Acc: 50.90% | Test Loss: 1.4888 | Test Acc: 56.53% | LR: 0.099807
+New best test accuracy: 56.53%
+Snapshot saved: ./snapshots_complete/cifar_epoch_7.pth
+
+Epoch 8/250
+Learning Rate: 0.099807
+Starting training...
+Starting evaluation...
+Train Loss: 1.5506 | Train Acc: 52.87% | Test Loss: 1.4206 | Test Acc: 60.49% | LR: 0.099748
+New best test accuracy: 60.49%
+Snapshot saved: ./snapshots_complete/cifar_epoch_8.pth
+
+Epoch 9/250
+Learning Rate: 0.099748
+Starting training...
+Starting evaluation...
+Train Loss: 1.5204 | Train Acc: 54.27% | Test Loss: 1.3894 | Test Acc: 61.93% | LR: 0.099681
+New best test accuracy: 61.93%
+Snapshot saved: ./snapshots_complete/cifar_epoch_9.pth
+
+Epoch 10/250
+Learning Rate: 0.099681
+Starting training...
+Starting evaluation...
+Train Loss: 1.4959 | Train Acc: 55.50% | Test Loss: 1.3713 | Test Acc: 62.83% | LR: 0.099606
+New best test accuracy: 62.83%
+Snapshot saved: ./snapshots_complete/cifar_epoch_10.pth
+
+Epoch 11/250
+Learning Rate: 0.099606
+Starting training...
+Starting evaluation...
+Train Loss: 1.4717 | Train Acc: 56.72% | Test Loss: 1.3770 | Test Acc: 62.76% | LR: 0.099523
+
+Epoch 12/250
+Learning Rate: 0.099523
+Starting training...
+Starting evaluation...
+Train Loss: 1.4531 | Train Acc: 57.80% | Test Loss: 1.3371 | Test Acc: 64.56% | LR: 0.099433
+New best test accuracy: 64.56%
+Snapshot saved: ./snapshots_complete/cifar_epoch_12.pth
+
+Epoch 13/250
+Learning Rate: 0.099433
+Starting training...
+Starting evaluation...
+Train Loss: 1.4337 | Train Acc: 59.01% | Test Loss: 1.3292 | Test Acc: 65.02% | LR: 0.099334
+New best test accuracy: 65.02%
+Snapshot saved: ./snapshots_complete/cifar_epoch_13.pth
+
+Epoch 14/250
+Learning Rate: 0.099334
+Starting training...
+Starting evaluation...
+Train Loss: 1.4188 | Train Acc: 59.87% | Test Loss: 1.2816 | Test Acc: 67.47% | LR: 0.099228
+New best test accuracy: 67.47%
+Snapshot saved: ./snapshots_complete/cifar_epoch_14.pth
+
+Epoch 15/250
+Learning Rate: 0.099228
+Starting training...
+Starting evaluation...
+Train Loss: 1.4011 | Train Acc: 60.92% | Test Loss: 1.3623 | Test Acc: 63.15% | LR: 0.099114
+
+Epoch 16/250
+Learning Rate: 0.099114
+Starting training...
+Starting evaluation...
+Train Loss: 1.3916 | Train Acc: 60.92% | Test Loss: 1.3246 | Test Acc: 66.77% | LR: 0.098993
+
+Epoch 17/250
+Learning Rate: 0.098993
+Starting training...
+Starting evaluation...
+Train Loss: 1.3751 | Train Acc: 61.88% | Test Loss: 1.2200 | Test Acc: 70.20% | LR: 0.098863
+New best test accuracy: 70.20%
+Snapshot saved: ./snapshots_complete/cifar_epoch_17.pth
+
+Epoch 18/250
+Learning Rate: 0.098863
+Starting training...
+Starting evaluation...
+Train Loss: 1.3642 | Train Acc: 62.46% | Test Loss: 1.2705 | Test Acc: 67.72% | LR: 0.098726
+
+Epoch 19/250
+Learning Rate: 0.098726
+Starting training...
+Starting evaluation...
+Train Loss: 1.3522 | Train Acc: 62.97% | Test Loss: 1.2438 | Test Acc: 68.71% | LR: 0.098582
+
+Epoch 20/250
+Learning Rate: 0.098582
+Starting training...
+Starting evaluation...
+Train Loss: 1.3475 | Train Acc: 63.46% | Test Loss: 1.2496 | Test Acc: 68.81% | LR: 0.098429
+
+Epoch 21/250
+Learning Rate: 0.098429
+Starting training...
+Starting evaluation...
+Train Loss: 1.3338 | Train Acc: 64.16% | Test Loss: 1.2069 | Test Acc: 71.08% | LR: 0.098269
+New best test accuracy: 71.08%
+Snapshot saved: ./snapshots_complete/cifar_epoch_21.pth
+
+Epoch 22/250
+Learning Rate: 0.098269
+Starting training...
+Starting evaluation...
+Train Loss: 1.3247 | Train Acc: 64.56% | Test Loss: 1.2305 | Test Acc: 69.52% | LR: 0.098101
+
+Epoch 23/250
+Learning Rate: 0.098101
+Starting training...
+Starting evaluation...
+Train Loss: 1.3195 | Train Acc: 64.74% | Test Loss: 1.2046 | Test Acc: 71.64% | LR: 0.097926
+New best test accuracy: 71.64%
+Snapshot saved: ./snapshots_complete/cifar_epoch_23.pth
+
+Epoch 24/250
+Learning Rate: 0.097926
+Starting training...
+Starting evaluation...
+Train Loss: 1.3119 | Train Acc: 65.50% | Test Loss: 1.2617 | Test Acc: 69.55% | LR: 0.097743
+
+Epoch 25/250
+Learning Rate: 0.097743
+Starting training...
+Starting evaluation...
+Train Loss: 1.3050 | Train Acc: 65.55% | Test Loss: 1.2484 | Test Acc: 69.40% | LR: 0.097553
+
+Epoch 26/250
+Learning Rate: 0.097553
+Starting training...
+Starting evaluation...
+Train Loss: 1.2955 | Train Acc: 66.10% | Test Loss: 1.1702 | Test Acc: 72.97% | LR: 0.097355
+New best test accuracy: 72.97%
+Snapshot saved: ./snapshots_complete/cifar_epoch_26.pth
+
+Epoch 27/250
+Learning Rate: 0.097355
+Starting training...
+Starting evaluation...
+Train Loss: 1.2906 | Train Acc: 66.20% | Test Loss: 1.2238 | Test Acc: 70.83% | LR: 0.097150
+
+Epoch 28/250
+Learning Rate: 0.097150
+Starting training...
+Starting evaluation...
+Train Loss: 1.2837 | Train Acc: 66.78% | Test Loss: 1.1679 | Test Acc: 73.65% | LR: 0.096937
+New best test accuracy: 73.65%
+Snapshot saved: ./snapshots_complete/cifar_epoch_28.pth
+
+Epoch 29/250
+Learning Rate: 0.096937
+Starting training...
+Starting evaluation...
+Train Loss: 1.2810 | Train Acc: 66.89% | Test Loss: 1.1465 | Test Acc: 74.30% | LR: 0.096716
+New best test accuracy: 74.30%
+Snapshot saved: ./snapshots_complete/cifar_epoch_29.pth
+
+Epoch 30/250
+Learning Rate: 0.096716
+Starting training...
+Starting evaluation...
+Train Loss: 1.2759 | Train Acc: 67.02% | Test Loss: 1.1826 | Test Acc: 72.12% | LR: 0.096489
+
+Epoch 31/250
+Learning Rate: 0.096489
+Starting training...
+Starting evaluation...
+Train Loss: 1.2669 | Train Acc: 67.53% | Test Loss: 1.1442 | Test Acc: 74.81% | LR: 0.096254
+New best test accuracy: 74.81%
+Snapshot saved: ./snapshots_complete/cifar_epoch_31.pth
+
+Epoch 32/250
+Learning Rate: 0.096254
+Starting training...
+Starting evaluation...
+Train Loss: 1.2628 | Train Acc: 67.90% | Test Loss: 1.2178 | Test Acc: 71.49% | LR: 0.096012
+
+Epoch 33/250
+Learning Rate: 0.096012
+Starting training...
+Starting evaluation...
+Train Loss: 1.2603 | Train Acc: 67.92% | Test Loss: 1.1514 | Test Acc: 74.08% | LR: 0.095762
+
+Epoch 34/250
+Learning Rate: 0.095762
+Starting training...
+Starting evaluation...
+Train Loss: 1.2563 | Train Acc: 68.17% | Test Loss: 1.1234 | Test Acc: 75.60% | LR: 0.095505
+New best test accuracy: 75.60%
+Snapshot saved: ./snapshots_complete/cifar_epoch_34.pth
+
+Epoch 35/250
+Learning Rate: 0.095505
+Starting training...
+Starting evaluation...
+Train Loss: 1.2525 | Train Acc: 68.39% | Test Loss: 1.1824 | Test Acc: 73.02% | LR: 0.095241
+
+Epoch 36/250
+Learning Rate: 0.095241
+Starting training...
+Starting evaluation...
+Train Loss: 1.2493 | Train Acc: 68.62% | Test Loss: 1.1626 | Test Acc: 73.79% | LR: 0.094970
+
+Epoch 37/250
+Learning Rate: 0.094970
+Starting training...
+Starting evaluation...
+Train Loss: 1.2462 | Train Acc: 68.73% | Test Loss: 1.1606 | Test Acc: 73.33% | LR: 0.094692
+
+Epoch 38/250
+Learning Rate: 0.094692
+Starting training...
+Starting evaluation...
+Train Loss: 1.2444 | Train Acc: 68.75% | Test Loss: 1.1500 | Test Acc: 74.56% | LR: 0.094407
+
+Epoch 39/250
+Learning Rate: 0.094407
+Starting training...
+Starting evaluation...
+Train Loss: 1.2404 | Train Acc: 69.05% | Test Loss: 1.1940 | Test Acc: 73.57% | LR: 0.094115
+
+Epoch 40/250
+Learning Rate: 0.094115
+Starting training...
+Starting evaluation...
+Train Loss: 1.2363 | Train Acc: 69.21% | Test Loss: 1.1593 | Test Acc: 74.57% | LR: 0.093815
+
+Epoch 41/250
+Learning Rate: 0.093815
+Starting training...
+Starting evaluation...
+Train Loss: 1.2287 | Train Acc: 69.46% | Test Loss: 1.1577 | Test Acc: 73.86% | LR: 0.093509
+
+Epoch 42/250
+Learning Rate: 0.093509
+Starting training...
+Starting evaluation...
+Train Loss: 1.2238 | Train Acc: 69.81% | Test Loss: 1.1765 | Test Acc: 73.75% | LR: 0.093196
+
+Epoch 43/250
+Learning Rate: 0.093196
+Starting training...
+Starting evaluation...
+Train Loss: 1.2256 | Train Acc: 69.58% | Test Loss: 1.1048 | Test Acc: 75.77% | LR: 0.092876
+New best test accuracy: 75.77%
+Snapshot saved: ./snapshots_complete/cifar_epoch_43.pth
+
+Epoch 44/250
+Learning Rate: 0.092876
+Starting training...
+Starting evaluation...
+Train Loss: 1.2222 | Train Acc: 69.80% | Test Loss: 1.1375 | Test Acc: 74.70% | LR: 0.092550
+
+Epoch 45/250
+Learning Rate: 0.092550
+Starting training...
+Starting evaluation...
+Train Loss: 1.2177 | Train Acc: 70.02% | Test Loss: 1.1158 | Test Acc: 75.21% | LR: 0.092216
+
+Epoch 46/250
+Learning Rate: 0.092216
+Starting training...
+Starting evaluation...
+Train Loss: 1.2169 | Train Acc: 70.04% | Test Loss: 1.1467 | Test Acc: 74.98% | LR: 0.091876
+
+Epoch 47/250
+Learning Rate: 0.091876
+Starting training...
+Starting evaluation...
+Train Loss: 1.2157 | Train Acc: 70.20% | Test Loss: 1.1494 | Test Acc: 74.50% | LR: 0.091530
+
+Epoch 48/250
+Learning Rate: 0.091530
+Starting training...
+Starting evaluation...
+Train Loss: 1.2121 | Train Acc: 70.27% | Test Loss: 1.1096 | Test Acc: 76.55% | LR: 0.091177
+New best test accuracy: 76.55%
+Snapshot saved: ./snapshots_complete/cifar_epoch_48.pth
+
+Epoch 49/250
+Learning Rate: 0.091177
+Starting training...
+Starting evaluation...
+Train Loss: 1.2100 | Train Acc: 70.50% | Test Loss: 1.0998 | Test Acc: 76.58% | LR: 0.090817
+New best test accuracy: 76.58%
+Snapshot saved: ./snapshots_complete/cifar_epoch_49.pth
+
+Epoch 50/250
+Learning Rate: 0.090817
+Starting training...
+Starting evaluation...
+Train Loss: 1.2086 | Train Acc: 70.59% | Test Loss: 1.1574 | Test Acc: 73.72% | LR: 0.090451
+
+Epoch 51/250
+Learning Rate: 0.090451
+Starting training...
+Starting evaluation...
+Train Loss: 1.2058 | Train Acc: 70.78% | Test Loss: 1.1500 | Test Acc: 73.73% | LR: 0.090078
+
+Epoch 52/250
+Learning Rate: 0.090078
+Starting training...
+Starting evaluation...
+Train Loss: 1.2046 | Train Acc: 70.73% | Test Loss: 1.1354 | Test Acc: 74.16% | LR: 0.089700
+
+Epoch 53/250
+Learning Rate: 0.089700
+Starting training...
+Starting evaluation...
+Train Loss: 1.2026 | Train Acc: 70.93% | Test Loss: 1.0959 | Test Acc: 76.38% | LR: 0.089315
+
+Epoch 54/250
+Learning Rate: 0.089315
+Starting training...
+Starting evaluation...
+Train Loss: 1.1993 | Train Acc: 71.08% | Test Loss: 1.1103 | Test Acc: 75.17% | LR: 0.088923
+
+Epoch 55/250
+Learning Rate: 0.088923
+Starting training...
+Starting evaluation...
+Train Loss: 1.1997 | Train Acc: 70.89% | Test Loss: 1.0687 | Test Acc: 78.28% | LR: 0.088526
+New best test accuracy: 78.28%
+Snapshot saved: ./snapshots_complete/cifar_epoch_55.pth
+
+Epoch 56/250
+Learning Rate: 0.088526
+Starting training...
+Starting evaluation...
+Train Loss: 1.1968 | Train Acc: 71.13% | Test Loss: 1.1169 | Test Acc: 76.83% | LR: 0.088122
+
+Epoch 57/250
+Learning Rate: 0.088122
+Starting training...
+Starting evaluation...
+Train Loss: 1.1953 | Train Acc: 71.24% | Test Loss: 1.0968 | Test Acc: 76.26% | LR: 0.087713
+
+Epoch 58/250
+Learning Rate: 0.087713
+Starting training...
+Starting evaluation...
+Train Loss: 1.1940 | Train Acc: 71.43% | Test Loss: 1.0769 | Test Acc: 77.52% | LR: 0.087297
+
+Epoch 59/250
+Learning Rate: 0.087297
+Starting training...
+Starting evaluation...
+Train Loss: 1.1919 | Train Acc: 71.30% | Test Loss: 1.1031 | Test Acc: 76.84% | LR: 0.086876
+
+Epoch 60/250
+Learning Rate: 0.086876
+Starting training...
+Starting evaluation...
+Train Loss: 1.1853 | Train Acc: 71.86% | Test Loss: 1.1019 | Test Acc: 77.15% | LR: 0.086449
+
+Epoch 61/250
+Learning Rate: 0.086449
+Starting training...
+Starting evaluation...
+Train Loss: 1.1875 | Train Acc: 71.60% | Test Loss: 1.1052 | Test Acc: 76.93% | LR: 0.086016
+
+Epoch 62/250
+Learning Rate: 0.086016
+Starting training...
+Starting evaluation...
+Train Loss: 1.1859 | Train Acc: 71.58% | Test Loss: 1.1251 | Test Acc: 75.41% | LR: 0.085577
+
+Epoch 63/250
+Learning Rate: 0.085577
+Starting training...
+Starting evaluation...
+Train Loss: 1.1834 | Train Acc: 71.91% | Test Loss: 1.1242 | Test Acc: 76.48% | LR: 0.085133
+
+Epoch 64/250
+Learning Rate: 0.085133
+Starting training...
+Starting evaluation...
+Train Loss: 1.1819 | Train Acc: 71.95% | Test Loss: 1.0808 | Test Acc: 77.16% | LR: 0.084683
+
+Epoch 65/250
+Learning Rate: 0.084683
+Starting training...
+Starting evaluation...
+Train Loss: 1.1778 | Train Acc: 72.42% | Test Loss: 1.1365 | Test Acc: 75.28% | LR: 0.084228
+
+Epoch 66/250
+Learning Rate: 0.084228
+Starting training...
+Starting evaluation...
+Train Loss: 1.1797 | Train Acc: 72.03% | Test Loss: 1.1063 | Test Acc: 75.79% | LR: 0.083767
+
+Epoch 67/250
+Learning Rate: 0.083767
+Starting training...
+Starting evaluation...
+Train Loss: 1.1760 | Train Acc: 72.16% | Test Loss: 1.1552 | Test Acc: 74.88% | LR: 0.083301
+
+Epoch 68/250
+Learning Rate: 0.083301
+Starting training...
+Starting evaluation...
+Train Loss: 1.1777 | Train Acc: 72.05% | Test Loss: 1.1044 | Test Acc: 77.00% | LR: 0.082829
+
+Epoch 69/250
+Learning Rate: 0.082829
+Starting training...
+Starting evaluation...
+Train Loss: 1.1724 | Train Acc: 72.68% | Test Loss: 1.1011 | Test Acc: 76.92% | LR: 0.082353
+
+Epoch 70/250
+Learning Rate: 0.082353
+Starting training...
+Starting evaluation...
+Train Loss: 1.1709 | Train Acc: 72.54% | Test Loss: 1.0837 | Test Acc: 77.71% | LR: 0.081871
+
+Epoch 71/250
+Learning Rate: 0.081871
+Starting training...
+Starting evaluation...
+Train Loss: 1.1710 | Train Acc: 72.55% | Test Loss: 1.1098 | Test Acc: 75.53% | LR: 0.081385
+
+Epoch 72/250
+Learning Rate: 0.081385
+Starting training...
+Starting evaluation...
+Train Loss: 1.1701 | Train Acc: 72.68% | Test Loss: 1.1239 | Test Acc: 75.65% | LR: 0.080893
+
+Epoch 73/250
+Learning Rate: 0.080893
+Starting training...
+Starting evaluation...
+Train Loss: 1.1691 | Train Acc: 72.57% | Test Loss: 1.1571 | Test Acc: 74.11% | LR: 0.080397
+
+Epoch 74/250
+Learning Rate: 0.080397
+Starting training...
+Starting evaluation...
+Train Loss: 1.1672 | Train Acc: 72.79% | Test Loss: 1.0734 | Test Acc: 77.58% | LR: 0.079895
+
+Epoch 75/250
+Learning Rate: 0.079895
+Starting training...
+Starting evaluation...
+Train Loss: 1.1659 | Train Acc: 72.94% | Test Loss: 1.0986 | Test Acc: 77.06% | LR: 0.079389
+
+Epoch 76/250
+Learning Rate: 0.079389
+Starting training...
+Starting evaluation...
+Train Loss: 1.1586 | Train Acc: 73.20% | Test Loss: 1.0567 | Test Acc: 78.47% | LR: 0.078879
+New best test accuracy: 78.47%
+Snapshot saved: ./snapshots_complete/cifar_epoch_76.pth
+
+Epoch 77/250
+Learning Rate: 0.078879
+Starting training...
+Starting evaluation...
+Train Loss: 1.1627 | Train Acc: 72.81% | Test Loss: 1.0666 | Test Acc: 78.36% | LR: 0.078364
+
+Epoch 78/250
+Learning Rate: 0.078364
+Starting training...
+Starting evaluation...
+Train Loss: 1.1586 | Train Acc: 73.25% | Test Loss: 1.1026 | Test Acc: 76.60% | LR: 0.077844
+
+Epoch 79/250
+Learning Rate: 0.077844
+Starting training...
+Starting evaluation...
+Train Loss: 1.1581 | Train Acc: 73.04% | Test Loss: 1.1370 | Test Acc: 74.77% | LR: 0.077320
+
+Epoch 80/250
+Learning Rate: 0.077320
+Starting training...
+Starting evaluation...
+Train Loss: 1.1579 | Train Acc: 72.97% | Test Loss: 1.0845 | Test Acc: 77.27% | LR: 0.076792
+
+Epoch 81/250
+Learning Rate: 0.076792
+Starting training...
+Starting evaluation...
+Train Loss: 1.1542 | Train Acc: 73.35% | Test Loss: 1.0685 | Test Acc: 78.26% | LR: 0.076259
+
+Epoch 82/250
+Learning Rate: 0.076259
+Starting training...
+Starting evaluation...
+Train Loss: 1.1523 | Train Acc: 73.39% | Test Loss: 1.0656 | Test Acc: 78.62% | LR: 0.075722
+New best test accuracy: 78.62%
+Snapshot saved: ./snapshots_complete/cifar_epoch_82.pth
+
+Epoch 83/250
+Learning Rate: 0.075722
+Starting training...
+Starting evaluation...
+Train Loss: 1.1504 | Train Acc: 73.62% | Test Loss: 1.1084 | Test Acc: 76.88% | LR: 0.075181
+
+Epoch 84/250
+Learning Rate: 0.075181
+Starting training...
+Starting evaluation...
+Train Loss: 1.1487 | Train Acc: 73.60% | Test Loss: 1.0829 | Test Acc: 77.44% | LR: 0.074637
+
+Epoch 85/250
+Learning Rate: 0.074637
+Starting training...
+Starting evaluation...
+Train Loss: 1.1479 | Train Acc: 73.81% | Test Loss: 1.0833 | Test Acc: 78.01% | LR: 0.074088
+
+Epoch 86/250
+Learning Rate: 0.074088
+Starting training...
+Starting evaluation...
+Train Loss: 1.1500 | Train Acc: 73.59% | Test Loss: 1.1160 | Test Acc: 76.28% | LR: 0.073535
+
+Epoch 87/250
+Learning Rate: 0.073535
+Starting training...
+Starting evaluation...
+Train Loss: 1.1481 | Train Acc: 73.61% | Test Loss: 1.0786 | Test Acc: 78.39% | LR: 0.072979
+
+Epoch 88/250
+Learning Rate: 0.072979
+Starting training...
+Starting evaluation...
+Train Loss: 1.1443 | Train Acc: 73.84% | Test Loss: 1.0736 | Test Acc: 77.68% | LR: 0.072419
+
+Epoch 89/250
+Learning Rate: 0.072419
+Starting training...
+Starting evaluation...
+Train Loss: 1.1438 | Train Acc: 73.93% | Test Loss: 1.1139 | Test Acc: 76.35% | LR: 0.071856
+
+Epoch 90/250
+Learning Rate: 0.071856
+Starting training...
+Starting evaluation...
+Train Loss: 1.1418 | Train Acc: 74.24% | Test Loss: 1.0651 | Test Acc: 78.71% | LR: 0.071289
+New best test accuracy: 78.71%
+Snapshot saved: ./snapshots_complete/cifar_epoch_90.pth
+
+Epoch 91/250
+Learning Rate: 0.071289
+Starting training...
+Starting evaluation...
+Train Loss: 1.1419 | Train Acc: 73.93% | Test Loss: 1.1026 | Test Acc: 76.14% | LR: 0.070719
+
+Epoch 92/250
+Learning Rate: 0.070719
+Starting training...
+Starting evaluation...
+Train Loss: 1.1391 | Train Acc: 74.13% | Test Loss: 1.0709 | Test Acc: 77.83% | LR: 0.070146
+
+Epoch 93/250
+Learning Rate: 0.070146
+Starting training...
+Starting evaluation...
+Train Loss: 1.1416 | Train Acc: 74.01% | Test Loss: 1.0741 | Test Acc: 77.29% | LR: 0.069569
+
+Epoch 94/250
+Learning Rate: 0.069569
+Starting training...
+Starting evaluation...
+Train Loss: 1.1328 | Train Acc: 74.42% | Test Loss: 1.0694 | Test Acc: 78.46% | LR: 0.068989
+
+Epoch 95/250
+Learning Rate: 0.068989
+Starting training...
+Starting evaluation...
+Train Loss: 1.1358 | Train Acc: 74.54% | Test Loss: 1.0560 | Test Acc: 78.29% | LR: 0.068407
+
+Epoch 96/250
+Learning Rate: 0.068407
+Starting training...
+Starting evaluation...
+Train Loss: 1.1325 | Train Acc: 74.63% | Test Loss: 1.1215 | Test Acc: 76.23% | LR: 0.067821
+
+Epoch 97/250
+Learning Rate: 0.067821
+Starting training...
+Starting evaluation...
+Train Loss: 1.1276 | Train Acc: 74.69% | Test Loss: 1.0759 | Test Acc: 77.49% | LR: 0.067232
+
+Epoch 98/250
+Learning Rate: 0.067232
+Starting training...
+Starting evaluation...
+Train Loss: 1.1312 | Train Acc: 74.66% | Test Loss: 1.0775 | Test Acc: 77.41% | LR: 0.066641
+
+Epoch 99/250
+Learning Rate: 0.066641
+Starting training...
+Starting evaluation...
+Train Loss: 1.1301 | Train Acc: 74.61% | Test Loss: 1.0774 | Test Acc: 78.79% | LR: 0.066048
+New best test accuracy: 78.79%
+Snapshot saved: ./snapshots_complete/cifar_epoch_99.pth
+
+Epoch 100/250
+Learning Rate: 0.066048
+Starting training...
+Starting evaluation...
+Train Loss: 1.1290 | Train Acc: 74.91% | Test Loss: 1.0763 | Test Acc: 78.11% | LR: 0.065451
+
+Epoch 101/250
+Learning Rate: 0.065451
+Starting training...
+Starting evaluation...
+Train Loss: 1.1229 | Train Acc: 74.70% | Test Loss: 1.0818 | Test Acc: 77.13% | LR: 0.064852
+
+Epoch 102/250
+Learning Rate: 0.064852
+Starting training...
+Starting evaluation...
+Train Loss: 1.1231 | Train Acc: 74.86% | Test Loss: 1.0891 | Test Acc: 77.52% | LR: 0.064251
+
+Epoch 103/250
+Learning Rate: 0.064251
+Starting training...
+Starting evaluation...
+Train Loss: 1.1192 | Train Acc: 75.30% | Test Loss: 1.0559 | Test Acc: 78.72% | LR: 0.063648
+
+Epoch 104/250
+Learning Rate: 0.063648
+Starting training...
+Starting evaluation...
+Train Loss: 1.1209 | Train Acc: 75.02% | Test Loss: 1.0776 | Test Acc: 77.94% | LR: 0.063042
+
+Epoch 105/250
+Learning Rate: 0.063042
+Starting training...
+Starting evaluation...
+Train Loss: 1.1139 | Train Acc: 75.42% | Test Loss: 1.0593 | Test Acc: 78.27% | LR: 0.062435
+
+Epoch 106/250
+Learning Rate: 0.062435
+Starting training...
+Starting evaluation...
+Train Loss: 1.1181 | Train Acc: 75.09% | Test Loss: 1.0938 | Test Acc: 77.47% | LR: 0.061825
+
+Epoch 107/250
+Learning Rate: 0.061825
+Starting training...
+Starting evaluation...
+Train Loss: 1.1171 | Train Acc: 75.47% | Test Loss: 1.0704 | Test Acc: 78.03% | LR: 0.061214
+
+Epoch 108/250
+Learning Rate: 0.061214
+Starting training...
+Starting evaluation...
+Train Loss: 1.1160 | Train Acc: 75.07% | Test Loss: 1.0838 | Test Acc: 77.84% | LR: 0.060601
+
+Epoch 109/250
+Learning Rate: 0.060601
+Starting training...
+Starting evaluation...
+Train Loss: 1.1145 | Train Acc: 75.21% | Test Loss: 1.0516 | Test Acc: 79.28% | LR: 0.059986
+New best test accuracy: 79.28%
+Snapshot saved: ./snapshots_complete/cifar_epoch_109.pth
+
+Epoch 110/250
+Learning Rate: 0.059986
+Starting training...
+Starting evaluation...
+Train Loss: 1.1122 | Train Acc: 75.39% | Test Loss: 1.0987 | Test Acc: 76.95% | LR: 0.059369
+
+Epoch 111/250
+Learning Rate: 0.059369
+Starting training...
+Starting evaluation...
+Train Loss: 1.1125 | Train Acc: 75.47% | Test Loss: 1.0686 | Test Acc: 78.46% | LR: 0.058752
+
+Epoch 112/250
+Learning Rate: 0.058752
+Starting training...
+Starting evaluation...
+Train Loss: 1.1080 | Train Acc: 75.63% | Test Loss: 1.0826 | Test Acc: 77.05% | LR: 0.058132
+
+Epoch 113/250
+Learning Rate: 0.058132
+Starting training...
+Starting evaluation...
+Train Loss: 1.1081 | Train Acc: 75.65% | Test Loss: 1.0457 | Test Acc: 79.06% | LR: 0.057512
+
+Epoch 114/250
+Learning Rate: 0.057512
+Starting training...
+Starting evaluation...
+Train Loss: 1.1072 | Train Acc: 75.79% | Test Loss: 1.0915 | Test Acc: 77.45% | LR: 0.056890
+
+Epoch 115/250
+Learning Rate: 0.056890
+Starting training...
+Starting evaluation...
+Train Loss: 1.1062 | Train Acc: 75.95% | Test Loss: 1.0783 | Test Acc: 77.58% | LR: 0.056267
+
+Epoch 116/250
+Learning Rate: 0.056267
+Starting training...
+Starting evaluation...
+Train Loss: 1.1032 | Train Acc: 75.89% | Test Loss: 1.0630 | Test Acc: 78.17% | LR: 0.055643
+
+Epoch 117/250
+Learning Rate: 0.055643
+Starting training...
+Starting evaluation...
+Train Loss: 1.1040 | Train Acc: 76.04% | Test Loss: 1.0590 | Test Acc: 78.40% | LR: 0.055019
+
+Epoch 118/250
+Learning Rate: 0.055019
+Starting training...
+Starting evaluation...
+Train Loss: 1.0998 | Train Acc: 76.15% | Test Loss: 1.0962 | Test Acc: 76.99% | LR: 0.054393
+
+Epoch 119/250
+Learning Rate: 0.054393
+Starting training...
+Starting evaluation...
+Train Loss: 1.0986 | Train Acc: 76.47% | Test Loss: 1.0707 | Test Acc: 78.29% | LR: 0.053767
+
+Epoch 120/250
+Learning Rate: 0.053767
+Starting training...
+Starting evaluation...
+Train Loss: 1.0991 | Train Acc: 76.20% | Test Loss: 1.0603 | Test Acc: 78.05% | LR: 0.053140
+
+Epoch 121/250
+Learning Rate: 0.053140
+Starting training...
+Starting evaluation...
+Train Loss: 1.0950 | Train Acc: 76.36% | Test Loss: 1.0787 | Test Acc: 78.37% | LR: 0.052513
+
+Epoch 122/250
+Learning Rate: 0.052513
+Starting training...
+Starting evaluation...
+Train Loss: 1.0952 | Train Acc: 76.38% | Test Loss: 1.0497 | Test Acc: 79.63% | LR: 0.051885
+New best test accuracy: 79.63%
+Snapshot saved: ./snapshots_complete/cifar_epoch_122.pth
+
+Epoch 123/250
+Learning Rate: 0.051885
+Starting training...
+Starting evaluation...
+Train Loss: 1.0938 | Train Acc: 76.46% | Test Loss: 1.0896 | Test Acc: 77.07% | LR: 0.051257
+
+Epoch 124/250
+Learning Rate: 0.051257
+Starting training...
+Starting evaluation...
+Train Loss: 1.0932 | Train Acc: 76.39% | Test Loss: 1.0562 | Test Acc: 78.53% | LR: 0.050629
+
+Epoch 125/250
+Learning Rate: 0.050629
+Starting training...
+Starting evaluation...
+Train Loss: 1.0902 | Train Acc: 76.71% | Test Loss: 1.0465 | Test Acc: 79.46% | LR: 0.050001
+
+Epoch 126/250
+Learning Rate: 0.050001
+Starting training...
+Starting evaluation...
+Train Loss: 1.0884 | Train Acc: 76.70% | Test Loss: 1.0486 | Test Acc: 79.14% | LR: 0.049372
+
+Epoch 127/250
+Learning Rate: 0.049372
+Starting training...
+Starting evaluation...
+Train Loss: 1.0873 | Train Acc: 76.88% | Test Loss: 1.0441 | Test Acc: 79.39% | LR: 0.048744
+
+Epoch 128/250
+Learning Rate: 0.048744
+Starting training...
+Starting evaluation...
+Train Loss: 1.0883 | Train Acc: 76.89% | Test Loss: 1.0471 | Test Acc: 79.25% | LR: 0.048116
+
+Epoch 129/250
+Learning Rate: 0.048116
+Starting training...
+Starting evaluation...
+Train Loss: 1.0840 | Train Acc: 77.00% | Test Loss: 1.0485 | Test Acc: 79.09% | LR: 0.047488
+
+Epoch 130/250
+Learning Rate: 0.047488
+Starting training...
+Starting evaluation...
+Train Loss: 1.0808 | Train Acc: 77.17% | Test Loss: 1.0696 | Test Acc: 78.05% | LR: 0.046861
+
+Epoch 131/250
+Learning Rate: 0.046861
+Starting training...
+Starting evaluation...
+Train Loss: 1.0832 | Train Acc: 77.07% | Test Loss: 1.0536 | Test Acc: 79.27% | LR: 0.046234
+
+Epoch 132/250
+Learning Rate: 0.046234
+Starting training...
+Starting evaluation...
+Train Loss: 1.0829 | Train Acc: 77.09% | Test Loss: 1.0607 | Test Acc: 78.28% | LR: 0.045608
+
+Epoch 133/250
+Learning Rate: 0.045608
+Starting training...
+Starting evaluation...
+Train Loss: 1.0814 | Train Acc: 77.24% | Test Loss: 1.0390 | Test Acc: 79.64% | LR: 0.044982
+New best test accuracy: 79.64%
+Snapshot saved: ./snapshots_complete/cifar_epoch_133.pth
+
+Epoch 134/250
+Learning Rate: 0.044982
+Starting training...
+Starting evaluation...
+Train Loss: 1.0790 | Train Acc: 77.29% | Test Loss: 1.0697 | Test Acc: 78.66% | LR: 0.044358
+
+Epoch 135/250
+Learning Rate: 0.044358
+Starting training...
+Starting evaluation...
+Train Loss: 1.0781 | Train Acc: 77.07% | Test Loss: 1.0698 | Test Acc: 78.14% | LR: 0.043734
+
+Epoch 136/250
+Learning Rate: 0.043734
+Starting training...
+Starting evaluation...
+Train Loss: 1.0743 | Train Acc: 77.38% | Test Loss: 1.0378 | Test Acc: 79.55% | LR: 0.043111
+
+Epoch 137/250
+Learning Rate: 0.043111
+Starting training...
+Starting evaluation...
+Train Loss: 1.0741 | Train Acc: 77.50% | Test Loss: 1.0440 | Test Acc: 79.78% | LR: 0.042489
+New best test accuracy: 79.78%
+Snapshot saved: ./snapshots_complete/cifar_epoch_137.pth
+
+Epoch 138/250
+Learning Rate: 0.042489
+Starting training...
+Starting evaluation...
+Train Loss: 1.0713 | Train Acc: 77.78% | Test Loss: 1.0677 | Test Acc: 78.78% | LR: 0.041869
+
+Epoch 139/250
+Learning Rate: 0.041869
+Starting training...
+Starting evaluation...
+Train Loss: 1.0730 | Train Acc: 77.65% | Test Loss: 1.0452 | Test Acc: 79.16% | LR: 0.041249
+
+Epoch 140/250
+Learning Rate: 0.041249
+Starting training...
+Starting evaluation...
+Train Loss: 1.0695 | Train Acc: 77.79% | Test Loss: 1.0362 | Test Acc: 79.36% | LR: 0.040632
+
+Epoch 141/250
+Learning Rate: 0.040632
+Starting training...
+Starting evaluation...
+Train Loss: 1.0667 | Train Acc: 77.85% | Test Loss: 1.0359 | Test Acc: 79.46% | LR: 0.040015
+
+Epoch 142/250
+Learning Rate: 0.040015
+Starting training...
+Starting evaluation...
+Train Loss: 1.0609 | Train Acc: 78.35% | Test Loss: 1.0417 | Test Acc: 79.70% | LR: 0.039400
+
+Epoch 143/250
+Learning Rate: 0.039400
+Starting training...
+Starting evaluation...
+Train Loss: 1.0625 | Train Acc: 78.09% | Test Loss: 1.0368 | Test Acc: 79.98% | LR: 0.038787
+New best test accuracy: 79.98%
+Snapshot saved: ./snapshots_complete/cifar_epoch_143.pth
+
+Epoch 144/250
+Learning Rate: 0.038787
+Starting training...
+Starting evaluation...
+Train Loss: 1.0645 | Train Acc: 78.00% | Test Loss: 1.0273 | Test Acc: 80.07% | LR: 0.038176
+New best test accuracy: 80.07%
+Snapshot saved: ./snapshots_complete/cifar_epoch_144.pth
+
+Epoch 145/250
+Learning Rate: 0.038176
+Starting training...
+Starting evaluation...
+Train Loss: 1.0584 | Train Acc: 78.35% | Test Loss: 1.0498 | Test Acc: 78.47% | LR: 0.037566
+
+Epoch 146/250
+Learning Rate: 0.037566
+Starting training...
+Starting evaluation...
+Train Loss: 1.0578 | Train Acc: 78.28% | Test Loss: 1.0433 | Test Acc: 79.37% | LR: 0.036959
+
+Epoch 147/250
+Learning Rate: 0.036959
+Starting training...
+Starting evaluation...
+Train Loss: 1.0568 | Train Acc: 78.36% | Test Loss: 1.0595 | Test Acc: 79.01% | LR: 0.036353
+
+Epoch 148/250
+Learning Rate: 0.036353
+Starting training...
+Starting evaluation...
+Train Loss: 1.0547 | Train Acc: 78.59% | Test Loss: 1.0538 | Test Acc: 79.36% | LR: 0.035750
+
+Epoch 149/250
+Learning Rate: 0.035750
+Starting training...
+Starting evaluation...
+Train Loss: 1.0525 | Train Acc: 78.77% | Test Loss: 1.0421 | Test Acc: 79.00% | LR: 0.035149
+
+Epoch 150/250
+Learning Rate: 0.035149
+Starting training...
+Starting evaluation...
+Train Loss: 1.0527 | Train Acc: 78.82% | Test Loss: 1.0401 | Test Acc: 79.98% | LR: 0.034550
+
+Epoch 151/250
+Learning Rate: 0.034550
+Starting training...
+Starting evaluation...
+Train Loss: 1.0509 | Train Acc: 78.87% | Test Loss: 1.0493 | Test Acc: 79.38% | LR: 0.033953
+
+Epoch 152/250
+Learning Rate: 0.033953
+Starting training...
+Starting evaluation...
+Train Loss: 1.0494 | Train Acc: 78.85% | Test Loss: 1.0347 | Test Acc: 79.69% | LR: 0.033360
+
+Epoch 153/250
+Learning Rate: 0.033360
+Starting training...
+Starting evaluation...
+Train Loss: 1.0469 | Train Acc: 79.16% | Test Loss: 1.0372 | Test Acc: 79.45% | LR: 0.032769
+
+Epoch 154/250
+Learning Rate: 0.032769
+Starting training...
+Starting evaluation...
+Train Loss: 1.0465 | Train Acc: 78.92% | Test Loss: 1.0373 | Test Acc: 80.04% | LR: 0.032180
+
+Epoch 155/250
+Learning Rate: 0.032180
+Starting training...
+Starting evaluation...
+Train Loss: 1.0429 | Train Acc: 79.09% | Test Loss: 1.0500 | Test Acc: 79.78% | LR: 0.031594
+
+Epoch 156/250
+Learning Rate: 0.031594
+Starting training...
+Starting evaluation...
+Train Loss: 1.0434 | Train Acc: 79.14% | Test Loss: 1.0270 | Test Acc: 80.47% | LR: 0.031012
+New best test accuracy: 80.47%
+Snapshot saved: ./snapshots_complete/cifar_epoch_156.pth
+
+Epoch 157/250
+Learning Rate: 0.031012
+Starting training...
+Starting evaluation...
+Train Loss: 1.0421 | Train Acc: 79.38% | Test Loss: 1.0423 | Test Acc: 79.81% | LR: 0.030432
+
+Epoch 158/250
+Learning Rate: 0.030432
+Starting training...
+Starting evaluation...
+Train Loss: 1.0383 | Train Acc: 79.30% | Test Loss: 1.0326 | Test Acc: 80.88% | LR: 0.029855
+New best test accuracy: 80.88%
+Snapshot saved: ./snapshots_complete/cifar_epoch_158.pth
+
+Epoch 159/250
+Learning Rate: 0.029855
+Starting training...
+Starting evaluation...
+Train Loss: 1.0363 | Train Acc: 79.48% | Test Loss: 1.0362 | Test Acc: 79.88% | LR: 0.029282
+
+Epoch 160/250
+Learning Rate: 0.029282
+Starting training...
+Starting evaluation...
+Train Loss: 1.0375 | Train Acc: 79.39% | Test Loss: 1.0263 | Test Acc: 80.27% | LR: 0.028712
+
+Epoch 161/250
+Learning Rate: 0.028712
+Starting training...
+Starting evaluation...
+Train Loss: 1.0341 | Train Acc: 79.64% | Test Loss: 1.0561 | Test Acc: 79.20% | LR: 0.028145
+
+Epoch 162/250
+Learning Rate: 0.028145
+Starting training...
+Starting evaluation...
+Train Loss: 1.0334 | Train Acc: 79.64% | Test Loss: 1.0487 | Test Acc: 78.91% | LR: 0.027582
+
+Epoch 163/250
+Learning Rate: 0.027582
+Starting training...
+Starting evaluation...
+Train Loss: 1.0324 | Train Acc: 79.69% | Test Loss: 1.0250 | Test Acc: 80.59% | LR: 0.027022
+
+Epoch 164/250
+Learning Rate: 0.027022
+Starting training...
+Starting evaluation...
+Train Loss: 1.0295 | Train Acc: 79.88% | Test Loss: 1.0271 | Test Acc: 80.29% | LR: 0.026466
+
+Epoch 165/250
+Learning Rate: 0.026466
+Starting training...
+Starting evaluation...
+Train Loss: 1.0292 | Train Acc: 79.96% | Test Loss: 1.0240 | Test Acc: 80.04% | LR: 0.025913
+
+Epoch 166/250
+Learning Rate: 0.025913
+Starting training...
+Starting evaluation...
+Train Loss: 1.0267 | Train Acc: 80.02% | Test Loss: 1.0460 | Test Acc: 79.42% | LR: 0.025364
+
+Epoch 167/250
+Learning Rate: 0.025364
+Starting training...
+Starting evaluation...
+Train Loss: 1.0260 | Train Acc: 79.91% | Test Loss: 1.0131 | Test Acc: 81.11% | LR: 0.024820
+New best test accuracy: 81.11%
+Snapshot saved: ./snapshots_complete/cifar_epoch_167.pth
+
+Epoch 168/250
+Learning Rate: 0.024820
+Starting training...
+Starting evaluation...
+Train Loss: 1.0219 | Train Acc: 80.25% | Test Loss: 1.0240 | Test Acc: 80.44% | LR: 0.024279
+
+Epoch 169/250
+Learning Rate: 0.024279
+Starting training...
+Starting evaluation...
+Train Loss: 1.0224 | Train Acc: 80.44% | Test Loss: 1.0370 | Test Acc: 79.97% | LR: 0.023742
+
+Epoch 170/250
+Learning Rate: 0.023742
+Starting training...
+Starting evaluation...
+Train Loss: 1.0189 | Train Acc: 80.50% | Test Loss: 1.0260 | Test Acc: 80.20% | LR: 0.023209
+
+Epoch 171/250
+Learning Rate: 0.023209
+Starting training...
+Starting evaluation...
+Train Loss: 1.0191 | Train Acc: 80.36% | Test Loss: 1.0239 | Test Acc: 79.88% | LR: 0.022681
+
+Epoch 172/250
+Learning Rate: 0.022681
+Starting training...
+Starting evaluation...
+Train Loss: 1.0153 | Train Acc: 80.60% | Test Loss: 1.0116 | Test Acc: 80.76% | LR: 0.022157
+
+Epoch 173/250
+Learning Rate: 0.022157
+Starting training...
+Starting evaluation...
+Train Loss: 1.0173 | Train Acc: 80.59% | Test Loss: 1.0149 | Test Acc: 80.54% | LR: 0.021637
+
+Epoch 174/250
+Learning Rate: 0.021637
+Starting training...
+Starting evaluation...
+Train Loss: 1.0121 | Train Acc: 80.88% | Test Loss: 1.0163 | Test Acc: 80.58% | LR: 0.021122
+
+Epoch 175/250
+Learning Rate: 0.021122
+Starting training...
+Starting evaluation...
+Train Loss: 1.0130 | Train Acc: 80.68% | Test Loss: 1.0124 | Test Acc: 81.15% | LR: 0.020612
+New best test accuracy: 81.15%
+Snapshot saved: ./snapshots_complete/cifar_epoch_175.pth
+
+Epoch 176/250
+Learning Rate: 0.020612
+Starting training...
+Starting evaluation...
+Train Loss: 1.0081 | Train Acc: 81.13% | Test Loss: 1.0188 | Test Acc: 80.64% | LR: 0.020106
+
+Epoch 177/250
+Learning Rate: 0.020106
+Starting training...
+Starting evaluation...
+Train Loss: 1.0088 | Train Acc: 80.97% | Test Loss: 1.0140 | Test Acc: 80.71% | LR: 0.019604
+
+Epoch 178/250
+Learning Rate: 0.019604
+Starting training...
+Starting evaluation...
+Train Loss: 1.0087 | Train Acc: 81.11% | Test Loss: 1.0201 | Test Acc: 80.35% | LR: 0.019108
+
+Epoch 179/250
+Learning Rate: 0.019108
+Starting training...
+Starting evaluation...
+Train Loss: 1.0078 | Train Acc: 81.07% | Test Loss: 1.0159 | Test Acc: 80.87% | LR: 0.018616
+
+Epoch 180/250
+Learning Rate: 0.018616
+Starting training...
+Starting evaluation...
+Train Loss: 1.0010 | Train Acc: 81.43% | Test Loss: 1.0113 | Test Acc: 81.10% | LR: 0.018130
+
+📊 Generating plots for epoch 180...
+Training curves saved to: ./plots_complete/training_curves.png
+Learning rate schedule saved to: ./plots_complete/learning_rate_schedule.png
+✅ Training summary plots generated successfully!
+📁 All plots saved in: ./plots_complete
+Confusion matrix saved to: ./plots_complete/confusion_matrix.png
+Class metrics saved to: ./plots_complete/class_metrics.png
+Classification report saved to: ./plots_complete/classification_report.txt
+
+CIFAR-10 Classification Report
+Generated on: 2025-10-04 00:01:50
+============================================================
+
+Overall Performance:
+- Accuracy: 0.8110
+- Top-3 Accuracy: 0.9538
+- Top-5 Accuracy: 0.9861
+
+Macro Averages:
+- Precision: 0.8124
+- Recall: 0.8110
+- F1-Score: 0.8103
+
+Weighted Averages:
+- Precision: 0.8124
+- Recall: 0.8110
+- F1-Score: 0.8103
+
+Per-Class Performance:
+Class        Precision  Recall     F1-Score   Support 
+------------------------------------------------------------
+airplane     0.8419     0.7880     0.8140     1000    
+automobile   0.9040     0.9040     0.9040     1000    
+bird         0.7466     0.7160     0.7310     1000    
+cat          0.7188     0.6800     0.6989     1000    
+deer         0.7296     0.8120     0.7686     1000    
+dog          0.8015     0.7270     0.7625     1000    
+frog         0.7953     0.8820     0.8364     1000    
+horse        0.8467     0.8230     0.8347     1000    
+ship         0.8177     0.9330     0.8716     1000    
+truck        0.9215     0.8450     0.8816     1000    
+
+✅ Evaluation summary generated successfully!
+📁 All evaluation plots saved in: ./plots_complete
+✅ Plots generated successfully!
+
+Epoch 181/250
+Learning Rate: 0.018130
+Starting training...
+Starting evaluation...
+Train Loss: 1.0014 | Train Acc: 81.26% | Test Loss: 1.0257 | Test Acc: 80.48% | LR: 0.017648
+
+Epoch 182/250
+Learning Rate: 0.017648
+Starting training...
+Starting evaluation...
+Train Loss: 1.0010 | Train Acc: 81.64% | Test Loss: 1.0176 | Test Acc: 80.69% | LR: 0.017172
+
+Epoch 183/250
+Learning Rate: 0.017172
+Starting training...
+Starting evaluation...
+Train Loss: 1.0012 | Train Acc: 81.19% | Test Loss: 1.0100 | Test Acc: 81.15% | LR: 0.016700
+
+Epoch 184/250
+Learning Rate: 0.016700
+Starting training...
+Starting evaluation...
+Train Loss: 0.9969 | Train Acc: 81.51% | Test Loss: 1.0126 | Test Acc: 80.82% | LR: 0.016234
+
+Epoch 185/250
+Learning Rate: 0.016234
+Starting training...
+Starting evaluation...
+Train Loss: 0.9932 | Train Acc: 81.95% | Test Loss: 1.0218 | Test Acc: 80.72% | LR: 0.015773
+
+Epoch 186/250
+Learning Rate: 0.015773
+Starting training...
+Starting evaluation...
+Train Loss: 0.9935 | Train Acc: 82.00% | Test Loss: 1.0085 | Test Acc: 80.70% | LR: 0.015318
+
+Epoch 187/250
+Learning Rate: 0.015318
+Starting training...
+Starting evaluation...
+Train Loss: 0.9929 | Train Acc: 81.74% | Test Loss: 1.0041 | Test Acc: 81.55% | LR: 0.014868
+New best test accuracy: 81.55%
+Snapshot saved: ./snapshots_complete/cifar_epoch_187.pth
+
+Epoch 188/250
+Learning Rate: 0.014868
+Starting training...
+Starting evaluation...
+Train Loss: 0.9920 | Train Acc: 81.90% | Test Loss: 1.0144 | Test Acc: 80.32% | LR: 0.014424
+
+Epoch 189/250
+Learning Rate: 0.014424
+Starting training...
+Starting evaluation...
+Train Loss: 0.9894 | Train Acc: 82.11% | Test Loss: 1.0069 | Test Acc: 81.16% | LR: 0.013985
+
+Epoch 190/250
+Learning Rate: 0.013985
+Starting training...
+Starting evaluation...
+Train Loss: 0.9878 | Train Acc: 82.24% | Test Loss: 1.0112 | Test Acc: 80.64% | LR: 0.013552
+
+Epoch 191/250
+Learning Rate: 0.013552
+Starting training...
+Starting evaluation...
+Train Loss: 0.9878 | Train Acc: 81.91% | Test Loss: 1.0116 | Test Acc: 80.74% | LR: 0.013125
+
+Epoch 192/250
+Learning Rate: 0.013125
+Starting training...
+Starting evaluation...
+Train Loss: 0.9866 | Train Acc: 82.29% | Test Loss: 1.0091 | Test Acc: 80.89% | LR: 0.012704
+
+Epoch 193/250
+Learning Rate: 0.012704
+Starting training...
+Starting evaluation...
+Train Loss: 0.9821 | Train Acc: 82.38% | Test Loss: 1.0058 | Test Acc: 81.25% | LR: 0.012288
+
+Epoch 194/250
+Learning Rate: 0.012288
+Starting training...
+Starting evaluation...
+Train Loss: 0.9805 | Train Acc: 82.71% | Test Loss: 1.0214 | Test Acc: 80.54% | LR: 0.011879
+
+Epoch 195/250
+Learning Rate: 0.011879
+Starting training...
+Starting evaluation...
+Train Loss: 0.9788 | Train Acc: 82.79% | Test Loss: 1.0134 | Test Acc: 81.13% | LR: 0.011475
+
+Epoch 196/250
+Learning Rate: 0.011475
+Starting training...
+Starting evaluation...
+Train Loss: 0.9788 | Train Acc: 82.63% | Test Loss: 1.0007 | Test Acc: 81.56% | LR: 0.011078
+New best test accuracy: 81.56%
+Snapshot saved: ./snapshots_complete/cifar_epoch_196.pth
+
+Epoch 197/250
+Learning Rate: 0.011078
+Starting training...
+Starting evaluation...
+Train Loss: 0.9773 | Train Acc: 82.58% | Test Loss: 1.0049 | Test Acc: 81.04% | LR: 0.010686
+
+Epoch 198/250
+Learning Rate: 0.010686
+Starting training...
+Starting evaluation...
+Train Loss: 0.9775 | Train Acc: 82.70% | Test Loss: 1.0033 | Test Acc: 81.30% | LR: 0.010301
+
+Epoch 199/250
+Learning Rate: 0.010301
+Starting training...
+Starting evaluation...
+Train Loss: 0.9723 | Train Acc: 83.00% | Test Loss: 1.0104 | Test Acc: 80.97% | LR: 0.009923
+
+Epoch 200/250
+Learning Rate: 0.009923
+Starting training...
+Starting evaluation...
+Train Loss: 0.9719 | Train Acc: 83.16% | Test Loss: 1.0053 | Test Acc: 81.19% | LR: 0.009550
+
+Epoch 201/250
+Learning Rate: 0.009550
+Starting training...
+Starting evaluation...
+Train Loss: 0.9712 | Train Acc: 83.09% | Test Loss: 1.0028 | Test Acc: 81.43% | LR: 0.009184
+
+Epoch 202/250
+Learning Rate: 0.009184
+Starting training...
+Starting evaluation...
+Train Loss: 0.9707 | Train Acc: 83.19% | Test Loss: 0.9991 | Test Acc: 81.41% | LR: 0.008824
+
+Epoch 203/250
+Learning Rate: 0.008824
+Starting training...
+Starting evaluation...
+Train Loss: 0.9686 | Train Acc: 83.35% | Test Loss: 1.0230 | Test Acc: 80.54% | LR: 0.008471
+
+Epoch 204/250
+Learning Rate: 0.008471
+Starting training...
+Starting evaluation...
+Train Loss: 0.9666 | Train Acc: 83.37% | Test Loss: 1.0008 | Test Acc: 81.22% | LR: 0.008125
+
+Epoch 205/250
+Learning Rate: 0.008125
+Starting training...
+Starting evaluation...
+Train Loss: 0.9672 | Train Acc: 83.29% | Test Loss: 0.9997 | Test Acc: 81.37% | LR: 0.007785
+
+Epoch 206/250
+Learning Rate: 0.007785
+Starting training...
+Starting evaluation...
+Train Loss: 0.9644 | Train Acc: 83.41% | Test Loss: 1.0060 | Test Acc: 81.10% | LR: 0.007451
+
+Epoch 207/250
+Learning Rate: 0.007451
+Starting training...
+Starting evaluation...
+Train Loss: 0.9625 | Train Acc: 83.48% | Test Loss: 0.9965 | Test Acc: 81.45% | LR: 0.007125
+
+Epoch 208/250
+Learning Rate: 0.007125
+Starting training...
+Starting evaluation...
+Train Loss: 0.9616 | Train Acc: 83.66% | Test Loss: 1.0020 | Test Acc: 80.93% | LR: 0.006805
+
+Epoch 209/250
+Learning Rate: 0.006805
+Starting training...
+Starting evaluation...
+Train Loss: 0.9630 | Train Acc: 83.55% | Test Loss: 1.0014 | Test Acc: 81.38% | LR: 0.006492
+
+Epoch 210/250
+Learning Rate: 0.006492
+Starting training...
+Starting evaluation...
+Train Loss: 0.9561 | Train Acc: 83.73% | Test Loss: 1.0002 | Test Acc: 81.23% | LR: 0.006186
+
+Epoch 211/250
+Learning Rate: 0.006186
+Starting training...
+Starting evaluation...
+Train Loss: 0.9577 | Train Acc: 83.74% | Test Loss: 0.9979 | Test Acc: 81.29% | LR: 0.005886
+
+Epoch 212/250
+Learning Rate: 0.005886
+Starting training...
+Starting evaluation...
+Train Loss: 0.9549 | Train Acc: 83.85% | Test Loss: 0.9987 | Test Acc: 81.32% | LR: 0.005594
+
+Epoch 213/250
+Learning Rate: 0.005594
+Starting training...
+Starting evaluation...
+Train Loss: 0.9546 | Train Acc: 83.83% | Test Loss: 0.9956 | Test Acc: 81.48% | LR: 0.005309
+
+Epoch 214/250
+Learning Rate: 0.005309
+Starting training...
+Starting evaluation...
+Train Loss: 0.9534 | Train Acc: 84.02% | Test Loss: 0.9975 | Test Acc: 81.26% | LR: 0.005031
+
+Epoch 215/250
+Learning Rate: 0.005031
+Starting training...
+Starting evaluation...
+Train Loss: 0.9510 | Train Acc: 84.14% | Test Loss: 1.0015 | Test Acc: 81.14% | LR: 0.004760
+
+Epoch 216/250
+Learning Rate: 0.004760
+Starting training...
+Starting evaluation...
+Train Loss: 0.9524 | Train Acc: 84.14% | Test Loss: 0.9981 | Test Acc: 81.17% | LR: 0.004496
+
+Epoch 217/250
+Learning Rate: 0.004496
+Starting training...
+Starting evaluation...
+Train Loss: 0.9506 | Train Acc: 84.19% | Test Loss: 1.0020 | Test Acc: 81.13% | LR: 0.004239
+
+Epoch 218/250
+Learning Rate: 0.004239
+Starting training...
+Starting evaluation...
+Train Loss: 0.9486 | Train Acc: 84.32% | Test Loss: 0.9988 | Test Acc: 81.55% | LR: 0.003989
+
+Epoch 219/250
+Learning Rate: 0.003989
+Starting training...
+Starting evaluation...
+Train Loss: 0.9482 | Train Acc: 84.33% | Test Loss: 0.9971 | Test Acc: 81.45% | LR: 0.003747
+
+Epoch 220/250
+Learning Rate: 0.003747
+Starting training...
+Starting evaluation...
+Train Loss: 0.9474 | Train Acc: 84.42% | Test Loss: 0.9976 | Test Acc: 81.46% | LR: 0.003512
+
+Epoch 221/250
+Learning Rate: 0.003512
+Starting training...
+Starting evaluation...
+Train Loss: 0.9476 | Train Acc: 84.38% | Test Loss: 0.9927 | Test Acc: 81.59% | LR: 0.003285
+New best test accuracy: 81.59%
+Snapshot saved: ./snapshots_complete/cifar_epoch_221.pth
+
+Epoch 222/250
+Learning Rate: 0.003285
+Starting training...
+Starting evaluation...
+Train Loss: 0.9443 | Train Acc: 84.64% | Test Loss: 0.9979 | Test Acc: 81.39% | LR: 0.003064
+
+Epoch 223/250
+Learning Rate: 0.003064
+Starting training...
+Starting evaluation...
+Train Loss: 0.9431 | Train Acc: 84.56% | Test Loss: 0.9949 | Test Acc: 81.67% | LR: 0.002851
+New best test accuracy: 81.67%
+Snapshot saved: ./snapshots_complete/cifar_epoch_223.pth
+
+Epoch 224/250
+Learning Rate: 0.002851
+Starting training...
+Starting evaluation...
+Train Loss: 0.9448 | Train Acc: 84.43% | Test Loss: 0.9944 | Test Acc: 81.50% | LR: 0.002646
+
+Epoch 225/250
+Learning Rate: 0.002646
+Starting training...
+Starting evaluation...
+Train Loss: 0.9421 | Train Acc: 84.83% | Test Loss: 0.9970 | Test Acc: 81.44% | LR: 0.002448
+
+Epoch 226/250
+Learning Rate: 0.002448
+Starting training...
+Starting evaluation...
+Train Loss: 0.9404 | Train Acc: 84.83% | Test Loss: 0.9948 | Test Acc: 81.35% | LR: 0.002258
+
+Epoch 227/250
+Learning Rate: 0.002258
+Starting training...
+Starting evaluation...
+Train Loss: 0.9392 | Train Acc: 84.75% | Test Loss: 0.9962 | Test Acc: 81.49% | LR: 0.002075
+
+Epoch 228/250
+Learning Rate: 0.002075
+Starting training...
+Starting evaluation...
+Train Loss: 0.9374 | Train Acc: 84.94% | Test Loss: 0.9991 | Test Acc: 81.36% | LR: 0.001900
+
+Epoch 229/250
+Learning Rate: 0.001900
+Starting training...
+Starting evaluation...
+Train Loss: 0.9387 | Train Acc: 84.84% | Test Loss: 0.9959 | Test Acc: 81.61% | LR: 0.001732
+
+Epoch 230/250
+Learning Rate: 0.001732
+Starting training...
+Starting evaluation...
+Train Loss: 0.9384 | Train Acc: 84.92% | Test Loss: 0.9927 | Test Acc: 81.75% | LR: 0.001572
+New best test accuracy: 81.75%
+Snapshot saved: ./snapshots_complete/cifar_epoch_230.pth
+
+Epoch 231/250
+Learning Rate: 0.001572
+Starting training...
+Starting evaluation...
+Train Loss: 0.9373 | Train Acc: 84.90% | Test Loss: 0.9959 | Test Acc: 81.62% | LR: 0.001419
+
+Epoch 232/250
+Learning Rate: 0.001419
+Starting training...
+Starting evaluation...
+Train Loss: 0.9369 | Train Acc: 84.85% | Test Loss: 0.9953 | Test Acc: 81.56% | LR: 0.001275
+
+Epoch 233/250
+Learning Rate: 0.001275
+Starting training...
+Starting evaluation...
+Train Loss: 0.9373 | Train Acc: 85.00% | Test Loss: 0.9950 | Test Acc: 81.52% | LR: 0.001138
+
+Epoch 234/250
+Learning Rate: 0.001138
+Starting training...
+Starting evaluation...
+Train Loss: 0.9354 | Train Acc: 85.14% | Test Loss: 0.9946 | Test Acc: 81.50% | LR: 0.001008
+
+Epoch 235/250
+Learning Rate: 0.001008
+Starting training...
+Starting evaluation...
+Train Loss: 0.9360 | Train Acc: 85.03% | Test Loss: 0.9937 | Test Acc: 81.61% | LR: 0.000887
+
+Epoch 236/250
+Learning Rate: 0.000887
+Starting training...
+Starting evaluation...
+Train Loss: 0.9340 | Train Acc: 85.02% | Test Loss: 0.9939 | Test Acc: 81.44% | LR: 0.000773
+
+Epoch 237/250
+Learning Rate: 0.000773
+Starting training...
+Starting evaluation...
+Train Loss: 0.9354 | Train Acc: 85.02% | Test Loss: 0.9930 | Test Acc: 81.62% | LR: 0.000667
+
+Epoch 238/250
+Learning Rate: 0.000667
+Starting training...
+Starting evaluation...
+Train Loss: 0.9318 | Train Acc: 85.12% | Test Loss: 0.9939 | Test Acc: 81.54% | LR: 0.000568
+
+Epoch 239/250
+Learning Rate: 0.000568
+Starting training...
+Starting evaluation...
+Train Loss: 0.9322 | Train Acc: 85.16% | Test Loss: 0.9932 | Test Acc: 81.56% | LR: 0.000478
+
+Epoch 240/250
+Learning Rate: 0.000478
+Starting training...
+Starting evaluation...
+Train Loss: 0.9330 | Train Acc: 85.22% | Test Loss: 0.9926 | Test Acc: 81.67% | LR: 0.000395
+
+Epoch 241/250
+Learning Rate: 0.000395
+Starting training...
+Starting evaluation...
+Train Loss: 0.9338 | Train Acc: 85.28% | Test Loss: 0.9932 | Test Acc: 81.68% | LR: 0.000320
+
+Epoch 242/250
+Learning Rate: 0.000320
+Starting training...
+Starting evaluation...
+Train Loss: 0.9321 | Train Acc: 85.24% | Test Loss: 0.9928 | Test Acc: 81.61% | LR: 0.000253
+
+Epoch 243/250
+Learning Rate: 0.000253
+Starting training...
+Starting evaluation...
+Train Loss: 0.9315 | Train Acc: 85.08% | Test Loss: 0.9932 | Test Acc: 81.52% | LR: 0.000194
+
+Epoch 244/250
+Learning Rate: 0.000194
+Starting training...
+Starting evaluation...
+Train Loss: 0.9296 | Train Acc: 85.45% | Test Loss: 0.9933 | Test Acc: 81.57% | LR: 0.000143
+
+Epoch 245/250
+Learning Rate: 0.000143
+Starting training...
+Starting evaluation...
+Train Loss: 0.9313 | Train Acc: 85.15% | Test Loss: 0.9927 | Test Acc: 81.63% | LR: 0.000100
+
+Epoch 246/250
+Learning Rate: 0.000100
+Starting training...
+Starting evaluation...
+Train Loss: 0.9325 | Train Acc: 85.10% | Test Loss: 0.9943 | Test Acc: 81.64% | LR: 0.000064
+
+Epoch 247/250
+Learning Rate: 0.000064
+Starting training...
+Starting evaluation...
+Train Loss: 0.9313 | Train Acc: 85.40% | Test Loss: 0.9926 | Test Acc: 81.53% | LR: 0.000037
+
+Epoch 248/250
+Learning Rate: 0.000037
+Starting training...
+Starting evaluation...
+Train Loss: 0.9301 | Train Acc: 85.42% | Test Loss: 0.9929 | Test Acc: 81.58% | LR: 0.000017
+
+Epoch 249/250
+Learning Rate: 0.000017
+Starting training...
+Starting evaluation...
+Train Loss: 0.9311 | Train Acc: 85.23% | Test Loss: 0.9931 | Test Acc: 81.58% | LR: 0.000005
+
+Epoch 250/250
+Learning Rate: 0.000005
+Starting training...
+Starting evaluation...
+Train Loss: 0.9310 | Train Acc: 85.13% | Test Loss: 0.9932 | Test Acc: 81.61% | LR: 0.000001
+
+📊 Generating plots for epoch 250...
+Training curves saved to: ./plots_complete/training_curves.png
+Learning rate schedule saved to: ./plots_complete/learning_rate_schedule.png
+✅ Training summary plots generated successfully!
+📁 All plots saved in: ./plots_complete
+Confusion matrix saved to: ./plots_complete/confusion_matrix.png
+Class metrics saved to: ./plots_complete/class_metrics.png
+Classification report saved to: ./plots_complete/classification_report.txt
+
+CIFAR-10 Classification Report
+Generated on: 2025-10-04 00:12:28
+============================================================
+
+Overall Performance:
+- Accuracy: 0.8161
+- Top-3 Accuracy: 0.9581
+- Top-5 Accuracy: 0.9870
+
+Macro Averages:
+- Precision: 0.8158
+- Recall: 0.8161
+- F1-Score: 0.8152
+
+Weighted Averages:
+- Precision: 0.8158
+- Recall: 0.8161
+- F1-Score: 0.8152
+
+Per-Class Performance:
+Class        Precision  Recall     F1-Score   Support 
+------------------------------------------------------------
+airplane     0.8193     0.8340     0.8266     1000    
+automobile   0.9135     0.8980     0.9057     1000    
+bird         0.7371     0.7290     0.7330     1000    
+cat          0.7395     0.6530     0.6936     1000    
+deer         0.7787     0.7880     0.7833     1000    
+dog          0.7734     0.7510     0.7620     1000    
+frog         0.7771     0.8960     0.8323     1000    
+horse        0.8503     0.8290     0.8395     1000    
+ship         0.8796     0.9060     0.8926     1000    
+truck        0.8895     0.8770     0.8832     1000    
+
+✅ Evaluation summary generated successfully!
+📁 All evaluation plots saved in: ./plots_complete
+✅ Plots generated successfully!
+
+🎯 Generating final comprehensive evaluation...
+Training curves saved to: ./plots_complete/training_curves.png
+Learning rate schedule saved to: ./plots_complete/learning_rate_schedule.png
+✅ Training summary plots generated successfully!
+📁 All plots saved in: ./plots_complete
+Confusion matrix saved to: ./plots_complete/confusion_matrix.png
+Class metrics saved to: ./plots_complete/class_metrics.png
+Classification report saved to: ./plots_complete/classification_report.txt
+
+CIFAR-10 Classification Report
+Generated on: 2025-10-04 00:12:34
+============================================================
+
+Overall Performance:
+- Accuracy: 0.8161
+- Top-3 Accuracy: 0.9581
+- Top-5 Accuracy: 0.9870
+
+Macro Averages:
+- Precision: 0.8158
+- Recall: 0.8161
+- F1-Score: 0.8152
+
+Weighted Averages:
+- Precision: 0.8158
+- Recall: 0.8161
+- F1-Score: 0.8152
+
+Per-Class Performance:
+Class        Precision  Recall     F1-Score   Support 
+------------------------------------------------------------
+airplane     0.8193     0.8340     0.8266     1000    
+automobile   0.9135     0.8980     0.9057     1000    
+bird         0.7371     0.7290     0.7330     1000    
+cat          0.7395     0.6530     0.6936     1000    
+deer         0.7787     0.7880     0.7833     1000    
+dog          0.7734     0.7510     0.7620     1000    
+frog         0.7771     0.8960     0.8323     1000    
+horse        0.8503     0.8290     0.8395     1000    
+ship         0.8796     0.9060     0.8926     1000    
+truck        0.8895     0.8770     0.8832     1000    
+
+✅ Evaluation summary generated successfully!
+📁 All evaluation plots saved in: ./plots_complete
+
+📈 Final Performance Summary:
+   • Test Accuracy: 0.8161
+   • Top-3 Accuracy: 0.9581
+   • Top-5 Accuracy: 0.9870
+   • Macro F1-Score: 0.8152
+   • Weighted F1-Score: 0.8152
+
+📁 All plots and reports saved in: ./plots_complete
+🎉 Training completed with comprehensive analysis!
