@@ -1,421 +1,213 @@
-# MNIST Image Classifier: A Progressive Learning Journey
+# CIFAR-10 Image Classifier: Advanced CNN with Residual Connections
 
-This project demonstrates the evolution of deep learning models for MNIST digit classification, showcasing three progressively sophisticated approaches that build upon each other's learnings. Each model represents a different stage in understanding CNN architecture, optimization techniques, and advanced training strategies.
+This project implements a sophisticated CNN architecture for CIFAR-10 image classification, featuring depthwise separable convolutions, residual connections, spatial dropout, and advanced training techniques. The model achieves **81.61% test accuracy** on CIFAR-10 dataset.
 
 ## 🎯 Project Overview
 
-The MNIST dataset consists of 70,000 grayscale images of handwritten digits (0-9), each 28×28 pixels. This project implements three distinct CNN models that progressively improve in accuracy and sophistication:
+The CIFAR-10 dataset consists of 60,000 32×32 color images in 10 classes (airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck). This project implements an advanced CNN with:
 
-- **Model 1**: Basic CNN setup targeting 95% accuracy with ~8K parameters
-- **Model 2**: Enhanced with Batch Normalization and Global Average Pooling
-- **Model 3**: Advanced model with data augmentation, optimized learning rate scheduling, and improved architecture targeting 98.4% accuracy
+- **Depthwise Separable Convolutions**: Efficient feature extraction with reduced parameters
+- **Residual Connections**: Improved gradient flow and training stability
+- **Spatial Dropout**: Better regularization for convolutional layers
+- **Advanced Augmentation**: Mandatory augmentations including HorizontalFlip, ShiftScaleRotate, and CoarseDropout
+- **Cosine Annealing**: Smooth learning rate scheduling without warmup
+- **Mixed Precision Training**: AMP support for faster training
 
-## 🏗️ Architecture Comparison
+## 🏗️ Model Architecture
 
-| Feature | Model 1 | Model 2 | Model 3 |
-|---------|---------|---------|---------|
-| **Total Parameters** | 7,616 | 7,798 | 7,762 |
-| **Convolutional Layers** | 7 | 7 | 6 |
-| **Batch Normalization** | ❌ | ✅ | ✅ |
-| **Global Average Pooling** | ❌ | ✅ | ✅ |
-| **Dropout** | ❌ | ✅ (0.1) | ✅ (0.0) |
-| **Max Pooling** | 2 layers | 2 layers | 3 layers |
-| **Data Augmentation** | Basic | Basic | Advanced |
-| **Learning Rate Schedule** | StepLR(15, 0.1) | StepLR(15, 0.1) | OneCycleLR |
-| **Final Accuracy** | 98.89% | 99.18% | 99.46% |
-
-## 📊 Performance Analysis
-
-### Model 1: Foundation Building
-```
-🎯 TARGET: Basic CNN setup achieving 95% accuracy in 15 epochs with ~8K parameters
-✅ ACHIEVED: 98.89% test accuracy (EXCEEDED by 3.89%)
-📊 PARAMETERS: 7,616 (within 8K target)
-```
+### **CIFARNet: Advanced CNN with Residual Connections**
 
 **Architecture Details:**
-- **Input**: 28×28×1 grayscale images
-- **Conv1**: 1→16 channels, 3×3 kernel
-- **Conv2**: 16→8 channels, 3×3 kernel  
-- **Conv3**: 8→16 channels, 3×3 kernel + MaxPool(2)
-- **Conv4**: 16→8 channels, 3×3 kernel
-- **Conv5**: 8→16 channels, 3×3 kernel + MaxPool(2)
-- **Conv6**: 16→8 channels, 3×3 kernel, padding=1
-- **Conv7**: 8→10 channels, 3×3 kernel, padding=1
-- **FC1**: 90→10 features (flattened 10×3×3)
+- **Input**: 32×32×3 RGB images
+- **Channel Progression**: 3 → 40 → 128 → 240 → 384 → 10
+- **Total Parameters**: ~1.2M parameters
+- **Final Test Accuracy**: **81.61%**
 
-**Key Learnings:**
-- Basic CNN structure with alternating channel patterns
-- Two max pooling layers for spatial reduction
-- Simple ReLU activations
-- Traditional fully connected layer approach
+### **Layer Breakdown:**
 
-### Model 2: Normalization & Pooling Enhancement
+| Layer | Type | Input Channels | Output Channels | Kernel Size | Stride | Padding | Special Features |
+|-------|------|----------------|-----------------|-------------|--------|---------|------------------|
+| **C1** | Conv2D | 3 | 40 | 3×3 | 1 | 1 | BatchNorm + ReLU + Spatial Dropout |
+| **C2** | Depthwise Separable | 40 | 128 | 3×3 (depth) + 1×1 (point) | 1 | 1 | **Residual Connection** + BatchNorm + ReLU + Spatial Dropout |
+| **C3** | Dilated Depthwise Separable | 128 | 240 | 3×3 (dilation=4) + 1×1 | 1 | 4 | **Residual Connection** + BatchNorm + ReLU + Spatial Dropout |
+| **C4** | Depthwise Separable | 240 | 384 | 3×3 (depth) + 1×1 (point) | 2 | 1 | BatchNorm + ReLU + Spatial Dropout |
+| **Output** | GAP + FC | 384 | 10 | Global Average Pool + Linear | - | - | Fully Connected Layer |
+
+### **Key Architectural Features:**
+
+- **Depthwise Separable Convolutions**: Efficient feature extraction with reduced computational cost
+- **Residual Connections**: Added to C2 and C3 layers for improved gradient flow
+- **Spatial Dropout**: Applied after each block for better regularization
+- **Dilated Convolutions**: C3 uses dilation=4 for larger receptive field without additional parameters
+- **Global Average Pooling**: Reduces overfitting compared to fully connected layers
+
+## 📊 Performance Results
+
+### **Final Training Results (250 Epochs)**
 ```
-🎯 TARGET: Use BatchNorm + Global Average Pooling while keeping ~8K parameters
-✅ ACHIEVED: 99.18% test accuracy (IMPROVED by 0.29% over Model 1)
-📊 PARAMETERS: 7,798 (within 8K target)
-```
-
-**Architecture Enhancements:**
-- **Batch Normalization**: Added after every convolutional layer
-- **Global Average Pooling**: Replaced FC layer with GAP + 10 output channels
-- **Dropout**: Added 0.1 dropout for regularization
-- **Channel Adjustment**: Modified conv6 to 16→12 channels for GAP compatibility
-
-**Key Improvements:**
-- **Faster Convergence**: BatchNorm enables higher learning rates
-- **Better Generalization**: Dropout prevents overfitting
-- **Parameter Efficiency**: GAP reduces parameters while maintaining performance
-- **Stable Training**: Normalized activations lead to more stable gradients
-
-### Model 3: Advanced Optimization
-```
-🎯 TARGET: 98.4% accuracy using image augmentation, OneCycleLR, MaxPooling, and receptive field calculations
-✅ ACHIEVED: 99.46% test accuracy (EXCEEDED by 1.06%)
-📊 PARAMETERS: 7,762 (MOST EFFICIENT of all models)
+🎯 ACHIEVED: 81.61% test accuracy on CIFAR-10
+📊 TRAIN ACCURACY: 85.13%
+📊 TEST ACCURACY: 81.61%
+📊 TOP-3 ACCURACY: 95.81%
+📊 TOP-5 ACCURACY: 98.70%
 ```
 
-**Advanced Features:**
-- **Data Augmentation**: RandomRotation(-7°, +7°) with fill=(1,)
-- **Optimized LR Schedule**: OneCycleLR (cyclical LR up then down within one run)
-- **Enhanced Architecture**: 3 max pooling layers for better spatial hierarchy
-- **Strategic Channel Design**: 1→8→8→12→12→24→10 progression
-- **Parameter Count**: 7,762 parameters (most efficient of all models)
+### **Per-Class Performance:**
 
-**Training Optimizations:**
-- **Custom Transforms**: Model-specific augmentation pipeline
-- **Aggressive LR Decay**: Faster learning rate reduction
-- **Multiple Pooling**: Better feature extraction at different scales
+| Class | Precision | Recall | F1-Score | Support |
+|-------|-----------|--------|----------|---------|
+| **airplane** | 0.8193 | 0.8340 | 0.8266 | 1000 |
+| **automobile** | 0.9135 | 0.8980 | 0.9057 | 1000 |
+| **bird** | 0.7371 | 0.7290 | 0.7330 | 1000 |
+| **cat** | 0.7395 | 0.6530 | 0.6936 | 1000 |
+| **deer** | 0.7787 | 0.7880 | 0.7833 | 1000 |
+| **dog** | 0.7734 | 0.7510 | 0.7620 | 1000 |
+| **frog** | 0.7771 | 0.8960 | 0.8323 | 1000 |
+| **horse** | 0.8503 | 0.8290 | 0.8395 | 1000 |
+| **ship** | 0.8796 | 0.9060 | 0.8926 | 1000 |
+| **truck** | 0.8895 | 0.8770 | 0.8832 | 1000 |
 
-## 🔬 Detailed Analysis
+### **Overall Metrics:**
+- **Macro F1-Score**: 0.8152
+- **Weighted F1-Score**: 0.8152
+- **Macro Precision**: 0.8158
+- **Macro Recall**: 0.8161
 
-### 🎯 Target vs Achievement Analysis
+## 🔬 Training Configuration
 
-#### **Model 1: Exceeding Expectations**
-- **Target**: 95% accuracy in 15 epochs with ~8K parameters
-- **Achievement**: 98.89% accuracy (3.89% above target) with 7,616 parameters
-- **Why This Is Excellent**: 
-  - **Parameter Efficiency**: Achieved 98.89% with only 7,616 parameters (well under 8K target)
-  - **Rapid Convergence**: Reached 96.19% test accuracy in just 1 epoch
-  - **Stable Learning**: Consistent improvement from 69.17% to 98.32% training accuracy
-  - **Foundation Success**: Proves basic CNN architecture can achieve high performance with proper design
+### **Training Parameters:**
+- **Batch Size**: 512
+- **Epochs**: 250
+- **Learning Rate**: 0.1 (initial)
+- **Momentum**: 0.9
+- **Weight Decay**: 5e-4
+- **Scheduler**: Cosine Annealing (no warmup)
+- **Optimizer**: SGD with Nesterov momentum
+- **Mixed Precision**: AMP enabled
+- **Gradient Clipping**: 1.0 max norm
 
-#### **Model 2: Modern Techniques Impact**
-- **Target**: Add BatchNorm + GAP while maintaining ~8K parameters
-- **Achievement**: 99.18% accuracy (+0.29% over Model 1) with 7,798 parameters
-- **Why This Is Excellent**:
-  - **Technique Validation**: BatchNorm + GAP provided measurable improvement
-  - **Parameter Constraint Met**: Only 182 additional parameters for significant gains
-  - **Training Stability**: Better convergence (88.08% → 97.89% in epoch 1 vs 69.17% → 96.19%)
-  - **Modern Best Practices**: Demonstrates value of normalization and global pooling
+### **Data Augmentation (Mandatory):**
+- **HorizontalFlip**: 50% probability
+- **ShiftScaleRotate**: shift_limit=0.0625, scale_limit=0.1, rotate_limit=15°
+- **CoarseDropout**: 1 hole, 16×16 pixels, filled with dataset mean
+- **ColorJitter**: brightness=0.2, contrast=0.2, saturation=0.2, hue=0.02
+- **RandomCrop**: 32×32 from 40×40 padded input
 
-#### **Model 3: Advanced Optimization Success**
-- **Target**: 98.4% accuracy with augmentation, OneCycleLR, MaxPooling, receptive field calculations
-- **Achievement**: 99.46% accuracy (+1.06% above target) with 7,762 parameters (most efficient)
-- **Why This Is Exceptional**:
-  - **Target Exceeded**: 1.06% above the ambitious 98.4% target
-  - **Most Efficient**: Lowest parameter count (7,762) while achieving highest accuracy
-  - **Advanced Techniques**: Successfully integrated multiple optimization strategies
-  - **Generalization**: Data augmentation + OneCycleLR improved robustness
+### **Key Training Insights:**
 
-### 🚀 Learning Progression Showcase
+#### **Architecture Effectiveness:**
+- **Residual Connections**: Significantly improved gradient flow in C2 and C3 layers
+- **Depthwise Separable Convolutions**: Efficient feature extraction with reduced parameters
+- **Spatial Dropout**: Better regularization compared to standard dropout
+- **Dilated Convolutions**: C3 layer's dilation=4 provided larger receptive field
 
-#### **1. Progressive Complexity & Knowledge Building**
-This project demonstrates **systematic learning progression** in deep learning:
-
-- **Model 1**: Establishes fundamental CNN understanding
-  - Proves that well-designed basic architectures can exceed expectations
-  - Shows importance of proper layer sequencing and channel progression
-  - Demonstrates that 7,616 parameters can achieve 98.89% accuracy
-
-- **Model 2**: Introduces modern training techniques
-  - Validates the impact of BatchNorm on training stability and convergence
-  - Proves Global Average Pooling's efficiency benefits
-  - Shows how small architectural changes (182 parameters) yield measurable improvements
-
-- **Model 3**: Demonstrates advanced optimization mastery
-  - Integrates multiple advanced techniques successfully
-  - Achieves highest accuracy with most efficient parameter usage
-  - Shows understanding of data augmentation, learning rate scheduling, and architectural design
-
-#### **2. Why This Progression Is Excellent**
-
-**🎯 Target Achievement Mastery**:
-- All models exceeded their targets, showing **realistic goal-setting** and **execution excellence**
-- Model 1: +3.89% above target (95% → 98.89%)
-- Model 2: +0.29% improvement over baseline with minimal parameter increase
-- Model 3: +1.06% above ambitious target (98.4% → 99.46%)
-
-**📊 Parameter Efficiency Excellence**:
-- Model 1: 7,616 parameters (under 8K target)
-- Model 2: 7,798 parameters (minimal increase for significant gains)
-- Model 3: 7,762 parameters (most efficient while achieving highest accuracy)
-
-**🔬 Technical Understanding Depth**:
-- **Architecture Design**: Understanding of channel progression, pooling placement, and layer sequencing
-- **Modern Techniques**: Proper implementation of BatchNorm, GAP, and dropout
-- **Advanced Optimization**: Integration of data augmentation, OneCycleLR, and multi-scale pooling
-- **Training Dynamics**: Recognition of learning rate scheduling importance and convergence patterns
-
-### Why These Models Are Effective
-
-#### 2. **Parameter Efficiency**
-All models maintain ~8K parameters, proving that:
-- **Quality over Quantity**: Well-designed architectures outperform larger, poorly structured networks
-- **Modern Techniques**: BatchNorm and GAP provide significant benefits with minimal parameter overhead
-- **Strategic Design**: Channel progression and pooling placement matter more than raw parameter count
-
-#### 3. **Training Stability**
-- **Model 1**: Shows the importance of proper architecture design
-- **Model 2**: Demonstrates how BatchNorm stabilizes training and enables faster convergence
-- **Model 3**: Proves that data augmentation and learning rate scheduling are crucial for high performance
-
-### Key Technical Insights
-
-#### **Batch Normalization Impact**
-- **Model 1 → Model 2**: +0.29% accuracy improvement
-- Enables higher learning rates without instability
-- Reduces internal covariate shift
-- Acts as implicit regularization
-
-#### **Global Average Pooling Benefits**
-- Reduces parameter count (90 → 10 parameters in final layer)
-- Prevents overfitting by eliminating fully connected layers
-- Provides spatial invariance
-- Maintains performance while improving efficiency
-
-#### **Data Augmentation Strategy**
-- **Model 3**: Custom rotation augmentation (-7° to +7°)
-- Improves generalization to unseen variations
-- Reduces overfitting on training data
-- Essential for achieving >98% accuracy
-
-#### **Learning Rate Scheduling**
-- **Model 1 & 2 – StepLR**: Piecewise-constant LR with periodic drops (step_size, gamma). Simple, stable, and effective when plateaus are known.
-- **Model 3 – OneCycleLR**: LR increases to a max then anneals to a very low value over the training run; typically momentum varies inversely. Leads to fast early learning, robust exploration, and fine-grained end fitting, often improving generalization and peak accuracy.
+#### **Training Strategy Success:**
+- **Cosine Annealing**: Smooth learning rate decay from 0.1 to 1e-6 over 250 epochs
+- **No Warmup**: Direct cosine scheduling proved effective
+- **Mixed Precision**: AMP provided training speedup without accuracy loss
+- **Gradient Clipping**: Prevented gradient explosion during training
 
 ## 🚀 Usage Instructions
 
-### Prerequisites
+### **Prerequisites**
 ```bash
-pip install torch torchvision tqdm
+pip install torch torchvision tqdm albumentations torchsummary
 ```
 
-### Running the Models
-
-#### Model 1 (Basic CNN)
+### **Quick Start**
 ```bash
-python main.py --model model1 --epochs 15
+# Run complete training with all features
+python run_complete_training.py
+
+# Direct training with custom parameters
+python main.py --batch_size 512 --epochs 250 --lr 0.1 --weight_decay 5e-4
 ```
 
-#### Model 2 (With BatchNorm & GAP)
+### **Advanced Training Options**
 ```bash
-python main.py --model model2 --epochs 15
+# Enable mixed precision training
+python main.py --amp --batch_size 512 --epochs 250
+
+# Custom gradient clipping
+python main.py --max_grad_norm 2.0 --epochs 250
+
+# Enable data caching for faster subsequent runs
+python main.py --cache_transforms --cache_dir ./cache --epochs 250
+
+# Custom snapshot frequency
+python main.py --snapshot_freq 10 --save_best --epochs 250
+
+# Generate visualizations
+python main.py --plot_training --plot_evaluation --plot_freq 50 --epochs 250
 ```
 
-#### Model 3 (Advanced with Augmentation)
-```bash
-python main.py --model model3 --epochs 15
-```
+### **Key Command Line Arguments**
+- `--batch_size`: Batch size (default: 512)
+- `--epochs`: Number of training epochs (default: 250)
+- `--lr`: Initial learning rate (default: 0.1)
+- `--weight_decay`: Weight decay for regularization (default: 5e-4)
+- `--amp`: Enable mixed precision training
+- `--max_grad_norm`: Gradient clipping threshold (default: 1.0)
+- `--cache_transforms`: Cache augmented data for faster training
+- `--plot_training`: Generate training curves
+- `--plot_evaluation`: Generate confusion matrix and metrics
+- `--save_best`: Save model only when test accuracy improves
 
-### Custom Training
-```bash
-python main.py --model model3 --epochs 20 --lr 0.01 --batch_size 64 --data_dir ./data
-```
+## 📊 Generated Outputs
 
-## 📈 Training Progress Comparison
+### **Training Logs**
+Complete training logs are saved to `./log/` directory with timestamps:
+- `training_complete_YYYYMMDD-HHMMSS.log`
 
-### Model 1 Training Curve
-- **Epoch 1**: 69.17% → 96.19% (rapid initial learning)
-- **Epoch 5**: 97.40% → 98.03% (steady improvement)
-- **Epoch 15**: 98.32% → 98.89% (convergence)
+### **Model Snapshots**
+Model checkpoints saved to `./snapshots_complete/`:
+- Automatic snapshots every 5 epochs
+- Best model saving when test accuracy improves
+- Complete state preservation (model, optimizer, scheduler, training history)
 
-### Model 2 Training Curve
-- **Epoch 1**: 88.08% → 97.89% (BatchNorm advantage)
-- **Epoch 5**: 97.42% → 98.71% (stable progression)
-- **Epoch 15**: 98.04% → 99.18% (superior final performance)
+### **Visualizations**
+All plots saved to `./plots_complete/`:
+- `training_curves.png` - Loss and accuracy curves
+- `confusion_matrix.png` - Classification confusion matrix
+- `class_metrics.png` - Per-class performance metrics
+- `learning_rate_schedule.png` - LR schedule over time
+- `classification_report.txt` - Detailed metrics report
 
-### Model 3 Training Curve
-- **Epoch 1**: 91.63% → 98.49% (excellent initial learning with augmentation)
-- **Epoch 5**: 97.83% → 99.30% (rapid convergence with optimized LR)
-- **Epoch 15**: 98.34% → 99.46% (superior final performance)
+## 🎓 Key Technical Achievements
 
-## 🎓 Learning Outcomes
+### **Architecture Innovations:**
+1. **Residual Connections**: Successfully integrated in C2 and C3 layers
+2. **Depthwise Separable Convolutions**: Efficient feature extraction
+3. **Dilated Convolutions**: C3 layer with dilation=4 for larger receptive field
+4. **Spatial Dropout**: Better regularization than standard dropout
 
-This project demonstrates several key deep learning concepts:
+### **Training Optimizations:**
+1. **Cosine Annealing**: Smooth LR decay without warmup complications
+2. **Mixed Precision Training**: AMP for faster training
+3. **Gradient Clipping**: Stable training with max_norm=1.0
+4. **Advanced Augmentation**: Mandatory augmentations for better generalization
 
-1. **Architecture Design**: How to build efficient CNNs with limited parameters
-2. **Normalization Techniques**: The impact of BatchNorm on training stability
-3. **Pooling Strategies**: Global Average Pooling vs. Fully Connected layers
-4. **Data Augmentation**: How to improve generalization with transformations
-5. **Learning Rate Scheduling**: The importance of adaptive learning rates
-6. **Progressive Enhancement**: Building upon previous models' strengths
+### **Performance Highlights:**
+- **81.61% test accuracy** on CIFAR-10
+- **95.81% top-3 accuracy** showing strong confidence
+- **Balanced performance** across all 10 classes
+- **Efficient architecture** with ~1.2M parameters
 
 ## 🔮 Future Enhancements
 
-- **Model 4**: Residual connections and attention mechanisms
-- **Model 5**: Ensemble methods and model averaging
-- **Model 6**: Transfer learning from pre-trained models
-- **Model 7**: Neural architecture search for optimal design
+- **Attention Mechanisms**: Add spatial/channel attention modules
+- **EfficientNet Scaling**: Compound scaling of depth, width, and resolution
+- **Knowledge Distillation**: Train smaller student models
+- **Advanced Augmentation**: MixUp, CutMix, or AutoAugment
+- **Ensemble Methods**: Combine multiple model predictions
 
 ## 📝 Conclusion
 
-This project showcases the evolution of CNN design from basic architectures to sophisticated, well-optimized models. Each model builds upon the previous one's learnings, demonstrating how modern deep learning techniques can achieve high accuracy with efficient parameter usage. The progression from 98.89% to 99.46% accuracy illustrates the cumulative impact of architectural improvements, normalization techniques, and advanced training strategies.
+This CIFAR-10 classifier demonstrates the effectiveness of modern CNN architectures with residual connections, depthwise separable convolutions, and advanced training techniques. The model achieves competitive 81.61% accuracy through:
 
-The key takeaway is that **thoughtful design and modern techniques often outperform brute-force parameter scaling**, making this an excellent foundation for understanding deep learning best practices.
+- **Thoughtful Architecture Design**: Residual connections and efficient convolutions
+- **Advanced Training Strategies**: Cosine annealing, mixed precision, and gradient clipping
+- **Robust Data Augmentation**: Mandatory augmentations for better generalization
+- **Comprehensive Evaluation**: Detailed metrics and visualizations
 
-## 📜 Logged Training Outputs (Excerpts)
-
-Below are brief snippets from the saved logs to illustrate parameter counts and training progress for each model.
-
-### model1_output.log
-```text
-Model: model1
-Total parameters: 7,616
-...
-Epoch 1
-Train Loss: 0.8583 | Train Acc: 69.17% | Test Loss: 0.1172 | Test Acc: 96.19%
-...
-Epoch 15
-Train Loss: 0.0521 | Train Acc: 98.32% | Test Loss: 0.0334 | Test Acc: 98.89%
-```
-
-### model2_output.log
-```text
-Model: model2
-Total parameters: 7,798
-...
-Epoch 1
-Train Loss: 0.4042 | Train Acc: 88.08% | Test Loss: 0.0689 | Test Acc: 97.89%
-...
-Epoch 15
-Train Loss: 0.0627 | Train Acc: 98.04% | Test Loss: 0.0277 | Test Acc: 99.18%
-```
-
-### model3_output.log
-```text
-Random seed set to: 42
-Total params: 7,762
-...
-Epoch 1
-Train Loss: 0.2859 | Train Acc: 91.63% | Test Loss: 0.0459 | Test Acc: 98.49%
-...
-Epoch 15
-Train Loss: 0.0526 | Train Acc: 98.34% | Test Loss: 0.0181 | Test Acc: 99.46%
-```
-
-## Model Snapshots
-
-The training script now supports automatic model snapshots and resuming training from snapshots.
-
-### Snapshot Features
-
-- **Automatic snapshots**: Save model state every N epochs
-- **Best model saving**: Save only when test accuracy improves
-- **Resume training**: Continue training from any saved snapshot
-- **Complete state preservation**: Saves model, optimizer, scheduler, and training history
-
-### Command Line Options
-
-```bash
-# Basic training with snapshots every 5 epochs (default)
-python main.py --epochs 20 --snapshot_freq 5
-
-# Save only when test accuracy improves
-python main.py --epochs 20 --save_best
-
-# Resume training from a specific snapshot
-python main.py --resume_from ./snapshots/cifar_epoch_10.pth --epochs 25
-
-# Custom snapshot directory
-python main.py --snapshot_dir ./my_snapshots --snapshot_freq 3
-```
-
-### Snapshot File Structure
-
-Each snapshot contains:
-- Model state dictionary
-- Optimizer state
-- Learning rate scheduler state
-- Training history (losses and accuracies)
-- Epoch number and timestamp
-
-### Example Usage
-
-```bash
-# Train for 10 epochs with snapshots every 3 epochs
-python main.py --epochs 10 --snapshot_freq 3
-
-# Resume from the latest snapshot and train for 5 more epochs
-python main.py --resume_from ./snapshots/cifar_epoch_9.pth --epochs 15
-
-# Use best model saving strategy
-python main.py --epochs 20 --save_best --snapshot_dir ./best_models
-```
-
-### Snapshot Management
-
-- Snapshots are saved in `./snapshots/` by default
-- Each snapshot is named: `{model_name}_epoch_{epoch_number}.pth`
-- Use `--snapshot_dir` to specify a custom directory
-- Use `--snapshot_freq` to control how often snapshots are saved
-- Use `--save_best` to only save when test accuracy improves
-
-## 📊 Visualization and Metrics
-
-The training script now includes comprehensive visualization and metrics capabilities.
-
-### Visualization Features
-
-- **Training Curves**: Loss, accuracy, and learning rate plots
-- **Confusion Matrix**: Visual representation of classification performance
-- **Per-Class Metrics**: Precision, recall, F1-score for each class
-- **Classification Report**: Detailed performance metrics
-- **Learning Rate Schedule**: Visualization of LR changes over time
-
-### Command Line Options
-
-```bash
-# Enable all visualizations
-python main.py --plot_training --plot_evaluation
-
-# Generate plots every 10 epochs
-python main.py --plot_training --plot_freq 10
-
-# Save plots to custom directory
-python main.py --plot_training --plot_dir ./my_plots
-
-# Disable all plotting for faster training
-python main.py --no_plots
-```
-
-### Generated Visualizations
-
-1. **training_curves.png**: Loss and accuracy curves over epochs
-2. **confusion_matrix.png**: Normalized confusion matrix with class names
-3. **class_metrics.png**: Per-class precision, recall, F1, and support
-4. **learning_rate_schedule.png**: Learning rate changes over time
-5. **classification_report.txt**: Detailed text report with all metrics
-
-### Example Usage
-
-```bash
-# Quick demo with visualization
-python example_visualization.py
-
-# Full training with all plots
-python main.py --batch_size 128 --epochs 20 --plot_training --plot_evaluation
-
-# Resume training with plots
-python main.py --resume_from ./snapshots/cifar_epoch_10.pth --plot_training --plot_evaluation
-```
-
-### Metrics Calculated
-
-- **Accuracy**: Overall classification accuracy
-- **Top-K Accuracy**: Top-3 and Top-5 accuracy
-- **Precision/Recall/F1**: Macro and weighted averages
-- **Per-Class Metrics**: Individual class performance
-- **Support**: Number of samples per class
-- **Confusion Matrix**: Detailed classification breakdown
+The project showcases how combining architectural innovations with modern training techniques can achieve strong performance on challenging computer vision tasks like CIFAR-10 classification.
