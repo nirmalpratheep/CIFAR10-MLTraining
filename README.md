@@ -1,6 +1,6 @@
 # CIFAR-10 Image Classifier: Advanced CNN with Residual Connections
 
-This project implements a sophisticated CNN architecture for CIFAR-10 image classification, featuring depthwise separable convolutions, residual connections, spatial dropout, and advanced training techniques. The model achieves **81.61% test accuracy** on CIFAR-10 dataset.
+This project implements a sophisticated CNN architecture for CIFAR-10 image classification, featuring depthwise separable convolutions, residual connections, spatial dropout, and advanced training techniques. The model achieves **87.94% test accuracy** on CIFAR-10 dataset.
 
 ## 🎯 Project Overview
 
@@ -35,8 +35,8 @@ The CIFAR-10 dataset consists of 60,000 32×32 color images in 10 classes (airpl
 
 **Model Performance Analysis**
 
-![Confusion Matrix](https://github.com/user/repo/raw/main/plots_complete/confusion_matrix.png)
-![Per-Class Metrics](https://github.com/user/repo/raw/main/plots_complete/class_metrics.png)
+![Confusion Matrix](https://github.com/nirmalpratheep/CIFAR10-MLTraining/blob/main/plots_complete/plots_complete/confusion_matrix.png)
+![Per-Class Metrics](https://github.com/nirmalpratheep/CIFAR10-MLTraining/blob/main/plots_complete/plots_complete/class_metrics.png)
 
 </div>
 
@@ -336,4 +336,5 @@ This CIFAR-10 classifier demonstrates the effectiveness of modern CNN architectu
 
 
 The project showcases how combining architectural innovations with modern training techniques can achieve state-of-the-art performance on challenging computer vision tasks like CIFAR-10 classification, with particular emphasis on efficiency, reliability, and generalization.
+
 
