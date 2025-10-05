@@ -31,21 +31,22 @@ def get_transforms(_: str | None = None):
     fill_value = _coarse_dropout_fill_value_from_mean(CIFAR10_MEAN)
 
     train_transforms = Compose([
-        PadIfNeeded(min_height=40, min_width=40, border_mode=0, p=1.0),
-        RandomCrop(height=32, width=32, p=1.0),
-        HorizontalFlip(p=0.5),
-        ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.1, rotate_limit=15, p=0.5),
-        CoarseDropout(
-            num_holes_range=(1, 1),
-            hole_height_range=(16, 16),
-            hole_width_range=(16, 16),
-            fill=fill_value,
-            p=0.5,
-        ),
-        ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.02, p=0.5),
-        Normalize(mean=CIFAR10_MEAN, std=CIFAR10_STD),
-        ToTensorV2(),
+    PadIfNeeded(min_height=36, min_width=36, border_mode=0, p=1.0),
+    RandomCrop(height=32, width=32, p=1.0),
+    HorizontalFlip(p=0.5),
+    ShiftScaleRotate(shift_limit=0.05, scale_limit=0.05, rotate_limit=5, p=0.3),
+    CoarseDropout(
+        num_holes_range=(1, 1),
+        hole_height_range=(8, 8),
+        hole_width_range=(8, 8),
+        fill=_coarse_dropout_fill_value_from_mean(CIFAR10_MEAN),
+        p=0.4,
+    ),
+    ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.02, p=0.4),
+    Normalize(mean=CIFAR10_MEAN, std=CIFAR10_STD),
+    ToTensorV2(),
     ])
+
 
     test_transforms = Compose([
         Normalize(mean=CIFAR10_MEAN, std=CIFAR10_STD),
