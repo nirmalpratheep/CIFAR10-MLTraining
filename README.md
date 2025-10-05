@@ -233,28 +233,28 @@ All plots saved to `./plots_complete/`:
 - **Accuracy Growth**: Smooth improvement from 28% → 85% (train), 40% → 81% (test)
 - **Convergence Pattern**: Shows stable convergence without overfitting
 
-![Training Curves](https://github.com/user/repo/raw/main/plots_complete/plots_complete/training_curves.png)
+![Training Curves](https://github.com/nirmalpratheep/CIFAR10-MLTraining/blob/main/plots_complete/plots_complete/training_curves.png)
 
 #### 🎯 **Confusion Matrix** (`confusion_matrix.png`)
 - **Class Confusion Analysis**: Visual representation of classification errors
 - **Best Classes**: automobile, ship, truck show strong diagonal dominance
 - **Challenging Pairs**: cat-dog confusion visible in off-diagonal elements
 
-![Confusion Matrix](https://github.com/user/repo/raw/main/plots_complete/plots_complete/confusion_matrix.png)
+![Confusion Matrix](https://github.com/nirmalpratheep/CIFAR10-MLTraining/blob/main/plots_complete/plots_complete/confusion_matrix.png)
 
 #### 📊 **Per-Class Metrics** (`class_metrics.png`)
 - **Performance Bars**: Precision, Recall, F1-Score comparison across all classes
 - **Class Rankings**: automobile (90.6%) > ship (89.3%) > truck (88.3%) > frog (83.2%)
 - **Support**: All classes balanced with 1000 samples each
 
-![Per-Class Metrics](https://github.com/user/repo/raw/main/plots_complete/plots_complete/class_metrics.png)
+![Per-Class Metrics](https://github.com/nirmalpratheep/CIFAR10-MLTraining/blob/main/plots_complete/plots_complete/class_metrics.png)
 
 #### 📉 **Learning Rate Schedule** (`learning_rate_schedule.png`)
 - **Cosine Annealing**: Smooth decay from 0.1 → 1e-6 over 250 epochs
 - **Warmup Phase**: 5-epoch warmup for stable training start
 - **Optimization**: Shows effective learning rate scheduling strategy
 
-![Learning Rate Schedule](https://github.com/user/repo/raw/main/plots_complete/plots_complete/learning_rate_schedule.png)
+![Learning Rate Schedule](https://github.com/nirmalpratheep/CIFAR10-MLTraining/blob/main/plots_complete/plots_complete/learning_rate_schedule.png)
 
 #### 📋 **Classification Report** (`classification_report.txt`)
 - **Detailed Metrics**: Complete precision, recall, F1-score breakdown
@@ -336,3 +336,4 @@ This CIFAR-10 classifier demonstrates the effectiveness of modern CNN architectu
 
 
 The project showcases how combining architectural innovations with modern training techniques can achieve state-of-the-art performance on challenging computer vision tasks like CIFAR-10 classification, with particular emphasis on efficiency, reliability, and generalization.
+
