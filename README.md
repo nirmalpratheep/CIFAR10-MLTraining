@@ -131,8 +131,6 @@ python main.py --amp --batch_size 512 --epochs 250
 # Custom gradient clipping
 python main.py --max_grad_norm 2.0 --epochs 250
 
-# Enable data caching for faster subsequent runs
-python main.py --cache_transforms --cache_dir ./cache --epochs 250
 
 # Custom snapshot frequency
 python main.py --snapshot_freq 10 --save_best --epochs 250
@@ -148,7 +146,6 @@ python main.py --plot_training --plot_evaluation --plot_freq 50 --epochs 250
 - `--weight_decay`: Weight decay for regularization (default: 5e-4)
 - `--amp`: Enable mixed precision training
 - `--max_grad_norm`: Gradient clipping threshold (default: 1.0)
-- `--cache_transforms`: Cache augmented data for faster training
 - `--plot_training`: Generate training curves
 - `--plot_evaluation`: Generate confusion matrix and metrics
 - `--save_best`: Save model only when test accuracy improves

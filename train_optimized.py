@@ -33,8 +33,6 @@ def run_training():
         "--snapshot_freq", "2",
         "--snapshot_dir", "./snapshots_optimized",
         "--save_best",
-        "--cache_transforms",
-        "--cache_dir", "./cache_optimized",
         "--plot_training",
         "--plot_evaluation",
         "--plot_freq", "5",

@@ -80,10 +80,8 @@ def run_complete_training():
         "--save_best",
         "--plot_training",
         "--plot_evaluation",
-        "--plot_freq", "180",
+        "--plot_freq", "250",
         "--plot_dir", "./plots_complete",
-        "--cache_transforms",
-        "--cache_dir", "./cache_complete",
         "--num_workers", "2",
         "--max_grad_norm", "1.0"
     ]
@@ -108,7 +106,6 @@ def run_complete_training():
         print("📁 Generated outputs:")
         print("   • ./snapshots_complete/ - Model snapshots")
         print("   • ./plots_complete/ - All visualizations")
-        print("   • ./cache_complete/ - Cached data transforms")
         print()
         print("📊 Generated visualizations:")
         print("   • training_curves.png - Loss and accuracy curves")

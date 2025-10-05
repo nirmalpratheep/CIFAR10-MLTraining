@@ -115,9 +115,6 @@ def main():
     parser.add_argument("--warmup_epochs", type=int, default=0, help="Number of warmup epochs (disabled)")
     parser.add_argument("--scheduler", type=str, default="cosine", choices=["cosine", "step", "onecycle"], help="Learning rate scheduler")
     parser.add_argument("--data_dir", type=str, default="./data")
-    parser.add_argument("--cache_transforms", action="store_true", help="Cache transformed samples to disk")
-    parser.add_argument("--cache_dir", type=str, default="./cache", help="Directory to store cached samples")
-    parser.add_argument("--cache_namespace", type=str, default=None, help="Namespace for cache (change if transforms change)")
     parser.add_argument("--no_cuda", action="store_true")
     
     # Snapshot-related arguments
@@ -144,11 +141,10 @@ def main():
 
     # Optimize data loading based on device
     use_cuda = torch.cuda.is_available() and not args.no_cuda
-    pin_memory = use_cuda and args.cache_transforms  # Only use pin_memory with caching for stability
+    pin_memory = use_cuda  # Use pin_memory when CUDA is available for better performance
     num_workers = min(args.num_workers, 2) if not use_cuda else args.num_workers
     
     print(f"Data loading: num_workers={num_workers}, pin_memory={pin_memory}, use_cuda={use_cuda}")
-    print(f"Caching: {args.cache_transforms} (dir: {args.cache_dir})")
     
     print("Loading datasets...")
     train_loader, test_loader = get_data_loaders(
@@ -158,9 +154,6 @@ def main():
         pin_memory=pin_memory,
         shuffle_train=True,
         model_name=args.model,
-        cache_transforms=args.cache_transforms,
-        cache_dir=args.cache_dir,
-        cache_namespace=args.cache_namespace,
     )
     
     # Test data loading
