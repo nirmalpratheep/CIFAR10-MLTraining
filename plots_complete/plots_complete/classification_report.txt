@@ -1,0 +1,33 @@
+
+CIFAR-10 Classification Report
+Generated on: 2025-10-05 19:37:31
+============================================================
+
+Overall Performance:
+- Accuracy: 0.8788
+- Top-3 Accuracy: 0.9774
+- Top-5 Accuracy: 0.9931
+
+Macro Averages:
+- Precision: 0.8786
+- Recall: 0.8788
+- F1-Score: 0.8781
+
+Weighted Averages:
+- Precision: 0.8786
+- Recall: 0.8788
+- F1-Score: 0.8781
+
+Per-Class Performance:
+Class        Precision  Recall     F1-Score   Support 
+------------------------------------------------------------
+airplane     0.8775     0.8810     0.8792     1000    
+automobile   0.9497     0.9260     0.9377     1000    
+bird         0.8502     0.8060     0.8275     1000    
+cat          0.8045     0.7450     0.7736     1000    
+deer         0.8346     0.8980     0.8651     1000    
+dog          0.8531     0.8130     0.8326     1000    
+frog         0.8625     0.9470     0.9028     1000    
+horse        0.9257     0.8970     0.9111     1000    
+ship         0.9164     0.9430     0.9295     1000    
+truck        0.9119     0.9320     0.9219     1000    
